@@ -19,6 +19,18 @@ Main navigation sidebar component
 - Shows remaining minutes balance
 - Auto-highlights current page
 
+### BaraldharSVG (`BaraldharSVG.tsx`)
+Flexible SVG component for rendering custom SVG graphics
+- **Sizes**: sm (16px), md (24px), lg (32px), xl (48px), or custom number
+- **Props**: viewBox, fill, stroke, className, and standard SVG attributes
+- **Usage**: 
+  ```tsx
+  <BaraldharSVG size="lg" fill="currentColor">
+    <circle cx="12" cy="12" r="10" />
+  </BaraldharSVG>
+  ```
+- **Examples**: See `BaraldharSVGExamples.tsx` for microphone, speaker, and custom icons
+
 ## Adding New Components
 
 When creating new components:
