@@ -1,9 +1,9 @@
 import { TelephonyAdapter, CallState, NormalizedCallEvent } from './types';
 
 class PlaceholderAdapter implements TelephonyAdapter {
-  async makeCall() { throw new Error("Provider not configured"); }
-  async receiveCall() { throw new Error("Provider not configured"); }
-  async hangupCall() { throw new Error("Provider not configured"); }
+  async makeCall(to: string, from: string, config: unknown): Promise<{ providerCallId: string; state: CallState }> { throw new Error('Provider not configured'); }
+  async receiveCall(event: unknown): Promise<{ providerCallId: string; state: CallState }> { throw new Error('Provider not configured'); }
+  async hangupCall(providerCallId: string): Promise<boolean> { throw new Error('Provider not configured'); }
   async getCallStatus(): Promise<CallState> { throw new Error("Provider not configured"); }
   validateWebhook() { return false; }
   normalizeCallEvent(): NormalizedCallEvent { throw new Error("Provider not configured"); }

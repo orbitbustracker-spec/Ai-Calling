@@ -47,6 +47,12 @@ model Organization {
   packageAssignments  PackageAssignment[]
   billingTransactions BillingTransaction[]
   usageRecords        UsageRecord[]
+  ivrMenus            IVRMenu[]
+  callQueues          CallQueue[]
+  campaigns           Campaign[]
+  smsLogs             SMSLog[]
+  whatsappLogs        WhatsAppLog[]
+  webhookEvents       WebhookEvent[]
 }
 
 model User {
@@ -116,6 +122,12 @@ model AIAgent {
   name            String
   greeting        String?
   businessInfo    String?
+  systemPrompt    String?
+  voiceId         String?
+  language        String?
+  temperature     Float?
+  maxDuration     Int?
+  isTemplate      Boolean       @default(false)
   knowledgeBaseId String?
   knowledgeBase   KnowledgeBase? @relation(fields: [knowledgeBaseId], references: [id], onDelete: SetNull)
   organizationId  String
@@ -163,6 +175,12 @@ model Call {
   durationSeconds  Int          @default(0)
   billableMinutes  Int          @default(0)
   failureReason    String?
+  
+  recordingUrl     String?
+  transcriptText   String?
+  summaryText      String?
+  sentimentScore   Float?
+  costNPR          Float        @default(0)
   
   providerMetadata Json?
   
@@ -271,3 +289,88 @@ model IdempotencyKey {
   createdAt DateTime @default(now())
 }
 
+
+model IVRMenu {
+  id              String       @id @default(cuid())
+  name            String
+  welcomeAudioUrl String?
+  keypressRoutes  Json?
+  timeoutSeconds  Int          @default(10)
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model CallQueue {
+  id                   String       @id @default(cuid())
+  name                 String
+  strategy             String       @default("ROUND_ROBIN")
+  maxWaitTimeSeconds   Int          @default(300)
+  organizationId       String
+  organization         Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model Campaign {
+  id             String       @id @default(cuid())
+  name           String
+  type           String       @default("VOICE_BROADCAST") // VOICE_BROADCAST, SMS
+  status         String       @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  totalContacts  Int          @default(0)
+  processedCount Int          @default(0)
+  successCount   Int          @default(0)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model SMSLog {
+  id               String       @id @default(cuid())
+  recipient        String
+  message          String
+  status           String
+  providerResponse String?
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model WhatsAppLog {
+  id             String       @id @default(cuid())
+  recipient      String
+  templateName   String
+  status         String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model WebhookEvent {
+  id             String       @id @default(cuid())
+  eventType      String
+  payload        Json
+  status         String       @default("PENDING") // PENDING, SUCCESS, FAILED
+  responseCode   Int?
+  retryCount     Int          @default(0)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+}

@@ -35,7 +35,7 @@ describe('Telephony Abstraction', () => {
   it('1. SUPER_ADMIN can access provider management', async () => {
     vi.mocked(requireSuperAdmin).mockResolvedValue({ id: 'sa-id' } as unknown);
     const req = new Request('http://localhost');
-    const res = await (listProviders as unknown as (...args: unknown[]) => unknown)(req);
+    const res = await (listProviders as unknown as (...args: unknown[]) => Promise<Response>)(req);
     expect(res.status).toBe(200);
     expect(requireSuperAdmin).toHaveBeenCalled();
   });
@@ -55,7 +55,7 @@ describe('Telephony Abstraction', () => {
     });
     
     const req = new Request('http://localhost');
-    const res = await (listProviders as unknown as (...args: unknown[]) => unknown)(req);
+    const res = await (listProviders as unknown as (...args: unknown[]) => Promise<Response>)(req);
     const data = await res.json();
     
     expect(data.some((p: {configuration?: string}) => p.configuration !== undefined)).toBe(false);
@@ -84,7 +84,7 @@ describe('Telephony Abstraction', () => {
       direction: 'INBOUND' as const,
       from: '0', to: '0', state: 'COMPLETED' as const
     };
-    expect((event as unknown as (...args: unknown[]) => unknown).organizationId).toBeUndefined();
+    expect((event as any).organizationId).toBeUndefined();
   });
 
   it('6. Call completion creates usage correctly', async () => {

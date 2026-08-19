@@ -32,8 +32,7 @@ export async function handleCallCompletion(event: NormalizedCallEvent) {
   if (event.state === 'COMPLETED' && billableMins > 0) {
     try {
       // Use providerCallId as idempotency key or composite
-      const idempotencyKey = `call_completion_${call.id}`;
-      await deductCallMinutes(call.organizationId, call.id, billableMins, 0, 0, idempotencyKey);
+      await deductCallMinutes(call.organizationId, call.id, billableMins, 0, 0);
     } catch (e: unknown) {
       if (e instanceof Error && e.message.includes('already processed')) {
         // Idempotent duplicate, ignore
