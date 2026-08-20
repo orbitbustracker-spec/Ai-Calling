@@ -13,7 +13,7 @@ async function main() {
     create: {
       email: 'superadmin@example.com',
       name: 'Super Admin',
-      passwordHash,
+      
       role: Role.SUPER_ADMIN,
     },
   })
@@ -35,7 +35,7 @@ async function main() {
     create: {
       email: 'orgadmin@example.com',
       name: 'Organization Admin',
-      passwordHash,
+      
       role: Role.ORGANIZATION_ADMIN,
       organizationId: demoOrg.id,
     },
@@ -48,7 +48,7 @@ async function main() {
     create: {
       email: 'supervisor@example.com',
       name: 'Supervisor',
-      passwordHash,
+      
       role: Role.SUPERVISOR,
       organizationId: demoOrg.id,
     },
@@ -61,7 +61,7 @@ async function main() {
     create: {
       email: 'agent@example.com',
       name: 'Agent',
-      passwordHash,
+      
       role: Role.AGENT,
       organizationId: demoOrg.id,
     },
@@ -74,7 +74,7 @@ async function main() {
     create: {
       email: 'viewer@example.com',
       name: 'Viewer',
-      passwordHash,
+      
       role: Role.VIEWER,
       organizationId: demoOrg.id,
     },
