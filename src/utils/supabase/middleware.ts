@@ -27,6 +27,21 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
+  const code = request.nextUrl.searchParams.get('code')
+  
+  if (code) {
+    // Exchange the code for a session
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (!error) {
+      // Successfully authenticated! Redirect to admin dashboard
+      const redirectUrl = request.nextUrl.clone()
+      redirectUrl.pathname = '/admin'
+      redirectUrl.searchParams.delete('code')
+      redirectUrl.searchParams.delete('next')
+      return NextResponse.redirect(redirectUrl)
+    }
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser()
