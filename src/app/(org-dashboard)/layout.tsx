@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { requireOrganizationMember } from "@/lib/authorization";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -26,3 +27,4 @@ export default async function OrgDashboardLayout({ children }: { children: React
     </div>
   );
 }
+
