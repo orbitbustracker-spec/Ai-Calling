@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { requireSuperAdmin } from '@/lib/authorization';
 import { PrismaClient } from '@prisma/client';
 import AssignPackageClient from './AssignPackageClient';
@@ -16,3 +17,4 @@ export default async function AssignPackagePage() {
     </div>
   );
 }
+

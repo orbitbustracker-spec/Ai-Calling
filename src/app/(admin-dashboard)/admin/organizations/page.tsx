@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { requireSuperAdmin } from '@/lib/authorization';
 import { PrismaClient } from '@prisma/client';
 import Link from 'next/link';
@@ -36,3 +37,4 @@ export default async function AdminOrgsPage() {
     </div>
   );
 }
+

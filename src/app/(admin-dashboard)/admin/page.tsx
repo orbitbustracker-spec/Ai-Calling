@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { requireSuperAdmin } from '@/lib/authorization';
 import { PrismaClient } from '@prisma/client';
 
@@ -39,3 +40,4 @@ export default async function SuperAdminOverview() {
     </div>
   );
 }
+

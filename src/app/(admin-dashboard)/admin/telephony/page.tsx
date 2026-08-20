@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { PrismaClient } from '@prisma/client';
 import { requireSuperAdmin } from '@/lib/authorization';
 import { BaraldharSVG } from '@/components/BaraldharSVG';
@@ -104,3 +105,4 @@ export default async function TelephonyConfigPage() {
     </div>
   );
 }
+

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { PrismaClient } from '@prisma/client';
 import CreatePackageForm from './CreatePackageForm';
 
@@ -58,3 +59,4 @@ export default async function PackagesPage() {
     </div>
   );
 }
+

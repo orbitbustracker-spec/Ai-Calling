@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { requireOrganizationAdmin } from '@/lib/authorization';
 import { PrismaClient } from '@prisma/client';
 import { redirect } from 'next/navigation';
@@ -113,3 +114,4 @@ export default async function OrgBillingPage() {
     </div>
   );
 }
+
