@@ -1,51 +1,44 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Button } from '../../../../components/Button';
-import { BaraldharSVG } from '../../../../components/BaraldharSVG';
-import { Mail, Lock, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/Button';
+import { BaraldharSVG } from '@/components/BaraldharSVG';
+import { Mail, AlertCircle } from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const supabase = createClient();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleMagicLinkLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    setMessage('');
 
     try {
-      const result = await signIn('credentials', {
-        redirect: false,
+      const { error } = await supabase.auth.signInWithOtp({
         email,
-        password,
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: \\/admin\,
+        },
       });
 
-      if (result?.error) {
-        setError('Invalid email or password');
+      if (error) {
+        setError(error.message);
       } else {
-        router.push('/admin');
-        router.refresh();
+        setMessage('Check your email for the magic link!');
       }
     } catch (err) {
-      setError('An error occurred during login');
+      setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const autofillDemo = (role: 'super' | 'org') => {
-    if (role === 'super') {
-      setEmail('superadmin@example.com');
-      setPassword('password123');
-    } else {
-      setEmail('orgadmin@example.com');
-      setPassword('password123');
     }
   };
 
@@ -65,32 +58,7 @@ export default function LoginPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          
-          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-            <h3 className="text-sm font-medium text-blue-800 mb-2">One-Click Demo Logins</h3>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="w-full text-xs"
-                onClick={() => autofillDemo('super')}
-                type="button"
-              >
-                Super Admin
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="w-full text-xs"
-                onClick={() => autofillDemo('org')}
-                type="button"
-              >
-                Org Admin
-              </Button>
-            </div>
-          </div>
-
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleMagicLinkLogin}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
@@ -112,27 +80,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2 border"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-
             {error && (
               <div className="rounded-md bg-red-50 p-4">
                 <div className="flex">
@@ -146,13 +93,19 @@ export default function LoginPage() {
               </div>
             )}
 
+            {message && (
+              <div className="rounded-md bg-green-50 p-4">
+                <h3 className="text-sm font-medium text-green-800">{message}</h3>
+              </div>
+            )}
+
             <div>
               <Button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'Sending Magic Link...' : 'Send Magic Link'}
               </Button>
             </div>
           </form>
