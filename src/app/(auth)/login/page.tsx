@@ -26,7 +26,7 @@ export default function LoginPage() {
         email,
         options: {
           shouldCreateUser: true,
-          emailRedirectTo: \\/admin\,
+          emailRedirectTo: `${window.location.origin}/admin`,
         },
       });
 
