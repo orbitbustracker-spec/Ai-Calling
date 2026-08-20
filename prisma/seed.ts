@@ -1,16 +1,18 @@
+import crypto from 'crypto';
 import { PrismaClient, Role } from '@prisma/client'
-import bcrypt from 'bcryptjs'
+
 
 const prisma = new PrismaClient()
 
 async function main() {
-  const passwordHash = await bcrypt.hash('password123', 10)
+  
 
   // 1 SUPER_ADMIN
   const superAdmin = await prisma.user.upsert({
     where: { email: 'superadmin@example.com' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'superadmin@example.com',
       name: 'Super Admin',
       
@@ -33,6 +35,7 @@ async function main() {
     where: { email: 'orgadmin@example.com' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'orgadmin@example.com',
       name: 'Organization Admin',
       
@@ -46,6 +49,7 @@ async function main() {
     where: { email: 'supervisor@example.com' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'supervisor@example.com',
       name: 'Supervisor',
       
@@ -59,6 +63,7 @@ async function main() {
     where: { email: 'agent@example.com' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'agent@example.com',
       name: 'Agent',
       
@@ -72,6 +77,7 @@ async function main() {
     where: { email: 'viewer@example.com' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'viewer@example.com',
       name: 'Viewer',
       
@@ -91,3 +97,5 @@ main()
   .finally(async () => {
     await prisma.$disconnect()
   })
+
+
