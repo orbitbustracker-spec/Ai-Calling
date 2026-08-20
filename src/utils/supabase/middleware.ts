@@ -39,6 +39,13 @@ export async function updateSession(request: NextRequest) {
       redirectUrl.searchParams.delete('code')
       redirectUrl.searchParams.delete('next')
       return NextResponse.redirect(redirectUrl)
+    } else {
+      // Error exchanging code!
+      const redirectUrl = request.nextUrl.clone()
+      redirectUrl.pathname = '/login'
+      redirectUrl.searchParams.delete('code')
+      redirectUrl.searchParams.set('error', error.message)
+      return NextResponse.redirect(redirectUrl)
     }
   }
 
