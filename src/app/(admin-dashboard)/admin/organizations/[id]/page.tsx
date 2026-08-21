@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { requireSuperAdmin } from '@/lib/authorization';
 import { PrismaClient } from '@prisma/client';
 import AdjustBalanceClient from './AdjustBalanceClient';
