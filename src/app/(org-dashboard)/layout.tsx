@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic';
 import { requireOrganizationMember } from "@/lib/authorization";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
+import { DualSidebar } from "@/components/layout/DualSidebar";
+import { HeaderCreditBar } from "@/components/layout/HeaderCreditBar";
 
 export default async function OrgDashboardLayout({ children }: { children: ReactNode }) {
   try {
@@ -11,20 +13,23 @@ export default async function OrgDashboardLayout({ children }: { children: React
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <aside className="w-64 bg-blue-900 text-white p-6">
-        <h2 className="text-xl font-bold mb-6">ORGANIZATION</h2>
-        <nav className="space-y-2 flex flex-col">
-          <a href="/dashboard" className="hover:text-blue-300">Overview</a>
-          <a href="/knowledge-base" className="hover:text-blue-300">Knowledge Base</a>
-          <a href="/agents" className="hover:text-blue-300">AI Agents</a>
-          <a href="/calls" className="hover:text-blue-300">Call History</a>
-        </nav>
-      </aside>
-      <main className="flex-1 p-8 overflow-y-auto">
-        {children}
-      </main>
+    <div className="flex h-screen bg-slate-950 text-slate-200 overflow-hidden">
+      <DualSidebar role="ORG_ADMIN" />
+      
+      <div className="flex-1 flex flex-col relative overflow-hidden bg-slate-950">
+        <HeaderCreditBar />
+        
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
+        </main>
+        
+        {/* Subtle Background Elements */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
+      </div>
     </div>
   );
 }
-

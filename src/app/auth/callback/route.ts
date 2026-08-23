@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const next = searchParams.get('next') ?? '/admin'
 
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      return NextResponse.redirect("origin/login?error=MissingEnvVars")
+      return NextResponse.redirect(`${origin}/login?error=MissingEnvVars`)
     }
 
     if (code) {
@@ -38,15 +38,15 @@ export async function GET(request: Request) {
       const { error } = await supabase.auth.exchangeCodeForSession(code)
       
       if (!error) {
-        return NextResponse.redirect("originnext")
+        return NextResponse.redirect(`${origin}${next}`)
       } else {
-        return NextResponse.redirect("origin/login?error=" + encodeURIComponent(error.message))
+        return NextResponse.redirect(`${origin}/login?error=` + encodeURIComponent(error.message))
       }
     }
 
-    return NextResponse.redirect("origin/login?error=NoCodeProvided")
+    return NextResponse.redirect(`${origin}/login?error=NoCodeProvided`)
   } catch (err: any) {
     const { origin } = new URL(request.url)
-    return NextResponse.redirect("origin/login?error=" + encodeURIComponent(err.message))
+    return NextResponse.redirect(`${origin}/login?error=` + encodeURIComponent(err.message))
   }
 }

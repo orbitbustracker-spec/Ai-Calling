@@ -17,11 +17,23 @@ export async function getCurrentUser() {
   if (!user) return null
 
   // Fetch role and org info from our Prisma DB
-  const dbUser = await prisma.user.findUnique({
+  let dbUser = await prisma.user.findUnique({
     where: { id: user.id }
   })
 
-  return dbUser || null
+  // Local Dev Fallback: If user exists in Supabase but not in local DB (webhook didn't hit local), create them!
+  if (!dbUser) {
+    dbUser = await prisma.user.create({
+      data: {
+        id: user.id,
+        email: user.email || 'unknown@example.com',
+        name: user.user_metadata?.full_name || 'Local Dev User',
+        role: Role.SUPER_ADMIN, // Defaulting to super admin for local dev
+      }
+    });
+  }
+
+  return dbUser
 }
 
 export async function getCurrentOrganization() {

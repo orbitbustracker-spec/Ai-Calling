@@ -38,32 +38,48 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users               User[]
-  knowledgeBases      KnowledgeBase[]
-  agents              AIAgent[]
-  calls               Call[]
-  customers           Customer[]
-  organizationBalance OrganizationBalance?
-  packageAssignments  PackageAssignment[]
-  billingTransactions BillingTransaction[]
-  usageRecords        UsageRecord[]
-  ivrMenus            IVRMenu[]
-  callQueues          CallQueue[]
-  campaigns           Campaign[]
-  smsLogs             SMSLog[]
-  whatsappLogs        WhatsAppLog[]
-  webhookEvents       WebhookEvent[]
+  // New Subscription Flags
+  isOmnichannelActive   Boolean   @default(false)
+  omnichannelExpiryDate DateTime?
+  isCommerceActive      Boolean   @default(false)
+  commerceMinutes       Int       @default(0)
+
+  users                 User[]
+  knowledgeBases        KnowledgeBase[]
+  agents                AIAgent[]
+  calls                 Call[]
+  customers             Customer[]
+  organizationBalance   OrganizationBalance?
+  packageAssignments    PackageAssignment[]
+  billingTransactions   BillingTransaction[]
+  usageRecords          UsageRecord[]
+  usageLogs             OrganizationUsageLog[]
+  featureConfigurations FeatureConfiguration[]
+  ivrMenus              IVRMenu[]
+  callQueues            CallQueue[]
+  campaigns             Campaign[]
+  smsLogs               SMSLog[]
+  whatsappLogs          WhatsAppLog[]
+  webhookEvents         WebhookEvent[]
+  CrmContact            CrmContact[]
+  CrmNote               CrmNote[]
+  CrmTicket             CrmTicket[]
+  CrmTransaction        CrmTransaction[]
+  AiNodes               OrganizationAiNode[]
+  SipTrunks             OrganizationSipTrunk[]
 }
 
 model User {
   id             String        @id @db.Uuid
   name           String?
   email          String        @unique
+  phone          String?       @unique
   role           Role          @default(VIEWER)
   organizationId String?
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
+  CrmNote        CrmNote[]
 
   @@index([organizationId])
   @@index([email])
@@ -82,14 +98,14 @@ model BillingConfig {
 }
 
 model TelephonyProvider {
-  id             String   @id @default(cuid())
-  name           String
-  providerType   String
-  enabled        Boolean  @default(true)
-  configuration  String   // Encrypted JSON string
-  capabilities   Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            String   @id @default(cuid())
+  name          String
+  providerType  String
+  enabled       Boolean  @default(true)
+  configuration String // Encrypted JSON string
+  capabilities  Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model PhoneNumberMapping {
@@ -117,7 +133,7 @@ model KnowledgeBase {
 }
 
 model AIAgent {
-  id              String        @id @default(cuid())
+  id              String         @id @default(cuid())
   name            String
   greeting        String?
   businessInfo    String?
@@ -126,13 +142,13 @@ model AIAgent {
   language        String?
   temperature     Float?
   maxDuration     Int?
-  isTemplate      Boolean       @default(false)
+  isTemplate      Boolean        @default(false)
   knowledgeBaseId String?
   knowledgeBase   KnowledgeBase? @relation(fields: [knowledgeBaseId], references: [id], onDelete: SetNull)
   organizationId  String
-  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 
   @@index([organizationId])
 }
@@ -145,48 +161,48 @@ model Customer {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  
-  calls          Call[]
+
+  calls Call[]
 
   @@index([organizationId])
   @@index([phoneNumber])
 }
 
 model Call {
-  id               String       @id @default(cuid())
-  organizationId   String
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  customerId       String?
-  customer         Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
-  agentId          String?
-  
-  provider         String?
-  providerCallId   String?
-  direction        String       @default("OUTBOUND") // INBOUND, OUTBOUND
-  fromNumber       String?
-  toNumber         String?
-  
-  status           CallStatus   @default(INITIATED)
-  
-  startedAt        DateTime?
-  answeredAt       DateTime?
-  endedAt          DateTime?
-  durationSeconds  Int          @default(0)
-  billableMinutes  Int          @default(0)
-  failureReason    String?
-  
-  recordingUrl     String?
-  transcriptText   String?
-  summaryText      String?
-  sentimentScore   Float?
-  costNPR          Float        @default(0)
-  
-  providerMetadata Json?
-  
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customerId     String?
+  customer       Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  agentId        String?
 
-  usageRecords     UsageRecord[]
+  provider       String?
+  providerCallId String?
+  direction      String  @default("OUTBOUND") // INBOUND, OUTBOUND
+  fromNumber     String?
+  toNumber       String?
+
+  status CallStatus @default(INITIATED)
+
+  startedAt       DateTime?
+  answeredAt      DateTime?
+  endedAt         DateTime?
+  durationSeconds Int       @default(0)
+  billableMinutes Int       @default(0)
+  failureReason   String?
+
+  recordingUrl   String?
+  transcriptText String?
+  summaryText    String?
+  sentimentScore Float?
+  costNPR        Float   @default(0)
+
+  providerMetadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usageRecords UsageRecord[]
 
   @@index([organizationId])
   @@index([customerId])
@@ -214,56 +230,56 @@ model Package {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  assignments     PackageAssignment[]
+  assignments PackageAssignment[]
 }
 
 model PackageAssignment {
-  id                      String       @id @default(cuid())
-  organizationId          String
-  organization            Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  packageId               String?
-  package                 Package?     @relation(fields: [packageId], references: [id], onDelete: SetNull)
-  
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  packageId      String?
+  package        Package?     @relation(fields: [packageId], references: [id], onDelete: SetNull)
+
   purchasedMinutes        Int
-  usedMinutes             Int          @default(0)
+  usedMinutes             Int   @default(0)
   remainingMinutes        Int
   packagePrice            Float
   ratePerMinuteAtPurchase Float
-  
-  status                  String       @default("ACTIVE") // ACTIVE, EXHAUSTED, EXPIRED
-  purchasedAt             DateTime     @default(now())
-  expiresAt               DateTime?
-  
-  createdAt               DateTime     @default(now())
-  updatedAt               DateTime     @updatedAt
+
+  status      String    @default("ACTIVE") // ACTIVE, EXHAUSTED, EXPIRED
+  purchasedAt DateTime  @default(now())
+  expiresAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([organizationId])
 }
 
 model BillingTransaction {
-  id               String       @id @default(cuid())
-  organizationId   String
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  type             String       // DEDUCTION, ADDITION, ADJUSTMENT
-  minutes          Int
-  balanceAfter     Int
-  description      String?
-  referenceId      String?      // callId or auditId
-  createdAt        DateTime     @default(now())
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String // DEDUCTION, ADDITION, ADJUSTMENT
+  minutes        Int
+  balanceAfter   Int
+  description    String?
+  referenceId    String? // callId or auditId
+  createdAt      DateTime     @default(now())
 
   @@index([organizationId])
 }
 
 model AuditLog {
-  id               String       @id @default(cuid())
-  actorUserId      String
-  organizationId   String
-  action           String
-  previousBalance  Int
-  adjustment       Int
-  newBalance       Int
-  reason           String
-  createdAt        DateTime     @default(now())
+  id              String   @id @default(cuid())
+  actorUserId     String
+  organizationId  String
+  action          String
+  previousBalance Int
+  adjustment      Int
+  newBalance      Int
+  reason          String
+  createdAt       DateTime @default(now())
 
   @@index([organizationId])
 }
@@ -288,7 +304,6 @@ model IdempotencyKey {
   createdAt DateTime @default(now())
 }
 
-
 model IVRMenu {
   id              String       @id @default(cuid())
   name            String
@@ -304,14 +319,14 @@ model IVRMenu {
 }
 
 model CallQueue {
-  id                   String       @id @default(cuid())
-  name                 String
-  strategy             String       @default("ROUND_ROBIN")
-  maxWaitTimeSeconds   Int          @default(300)
-  organizationId       String
-  organization         Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
+  id                 String       @id @default(cuid())
+  name               String
+  strategy           String       @default("ROUND_ROBIN")
+  maxWaitTimeSeconds Int          @default(300)
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
 
   @@index([organizationId])
 }
@@ -370,6 +385,238 @@ model WebhookEvent {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model AIEngineConfig {
+  id                String   @id @default(cuid())
+  category          String // 'LLM', 'TTS', 'STT', 'ORCHESTRATOR'
+  providerType      String // 'PRECONFIGURED', 'CUSTOM_OPENSOURCE'
+  providerName      String
+  baseUrl           String
+  authType          String // 'BEARER_TOKEN', 'API_KEY_HEADER', 'BASIC_AUTH', 'NONE'
+  authHeaderName    String?
+  apiKey            String // Encrypted
+  modelId           String
+  voiceId           String?
+  sampleRate        Int      @default(16000)
+  supportsStreaming Boolean  @default(true)
+  customHeadersJson String? // Stored as JSON string
+  isDefault         Boolean  @default(false)
+  status            String // 'ACTIVE', 'INACTIVE', 'TESTING'
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model OmnichannelMessage {
+  id        String   @id @default(cuid())
+  orgId     String
+  platform  String // 'WHATSAPP', 'MESSENGER', 'SMS', 'IG_DM'
+  sender    String
+  content   String
+  status    String // 'DELIVERED', 'READ', 'FAILED'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orgId])
+}
+
+model SoftphoneSession {
+  id              String   @id @default(cuid())
+  orgId           String
+  userId          String
+  extensionNumber String
+  registerStatus  String // 'REGISTERED', 'UNREGISTERED', 'FAILED'
+  sipServer       String
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([orgId])
+  @@index([userId])
+}
+
+model PendingRegistration {
+  id          String   @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String   @unique
+  phone       String
+  companyName String
+  website     String
+  jobTitle    String
+  country     String
+  pbxProfile  String
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Channel {
+  NTC_NCELL
+  WHATSAPP
+  MESSENGER
+  INSTAGRAM
+  TIKTOK
+  TELEGRAM
+  VIBER
+  LINKEDIN
+  CUSTOM_WEBHOOK
+}
+
+enum UsageType {
+  VOICE_CALL
+  TEXT_MESSAGE
+  MEDIA_MESSAGE
+}
+
+model OrganizationUsageLog {
+  id               String    @id @default(cuid())
+  organizationId   String
+  type             UsageType
+  channel          Channel
+  durationSeconds  Int?
+  messageCount     Int?
+  rateApplied      Float
+  totalDeductedNpr Float
+  timestamp        DateTime  @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+enum FeatureKey {
+  EXTENSIONS
+  VOICEMAIL
+  THREE_WAY_CALLING
+  TRANSFERS
+  CAMPAIGNS
+  SMART_DIALER
+  VOICE_BROADCASTING
+  CLICK_TO_CALL
+  CUSTOMER_CRM
+  CALL_NOTES
+  CALL_TAGGING
+  PERSONALIZED_MESSAGES
+  SOCIAL_INTEGRATIONS
+}
+
+model FeatureConfiguration {
+  id                  String     @id @default(cuid())
+  organizationId      String
+  featureKey          FeatureKey
+  configData          Json       @default("{}")
+  isEnabledByAdmin    Boolean    @default(false)
+  isUnlockedByPayment Boolean    @default(false)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, featureKey])
+}
+
+model SuperAdminAuditLog {
+  id           String   @id @default(cuid())
+  superAdminId String
+  targetOrgId  String
+  featureKey   String?
+  action       String
+  details      Json?
+  timestamp    DateTime @default(now())
+}
+
+model CrmContact {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  email          String?
+  phone          String?
+  jobTitle       String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  notes   CrmNote[]
+  tickets CrmTicket[]
+
+  @@index([organizationId])
+}
+
+model CrmNote {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contactId      String?
+  contact        CrmContact?  @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  content        String
+  authorId       String       @db.Uuid
+  author         User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([contactId])
+}
+
+model CrmTicket {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contactId      String?
+  contact        CrmContact?  @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  title          String
+  status         String       @default("OPEN")
+  description    String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([contactId])
+}
+
+model CrmTransaction {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  amount         Float
+  currency       String       @default("USD")
+  status         String       @default("COMPLETED")
+  description    String?
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+}
+model OrganizationAiNode {
+  id                 String       @id @default(cuid())
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  nodeType           String       // 'LLM', 'STT', 'TTS'
+  nodeName           String
+  baseUrl            String
+  encryptedAuthToken String?
+  headersJson        Json?
+  modelId            String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model OrganizationSipTrunk {
+  id                String       @id @default(cuid())
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  providerLabel     String
+  host              String
+  port              Int          @default(5060)
+  username          String
+  encryptedPassword String?
+  didsJson          Json?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
   @@index([organizationId])
 }

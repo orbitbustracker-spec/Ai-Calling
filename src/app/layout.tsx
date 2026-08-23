@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -14,7 +15,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-50">
-        {children}
+        <main className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+          {children}
+        </main>
+        
+        {/* ElevenLabs Conversational AI Widget Script */}
+        <Script src="https://elevenlabs.io/convai-widget/index.js" strategy="lazyOnload" />
       </body>
     </html>
   );
