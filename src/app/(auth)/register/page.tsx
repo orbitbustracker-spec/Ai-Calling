@@ -74,47 +74,47 @@ function RegisterForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-300">First Name</label>
-          <input required name="firstName" value={formData.firstName} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="John" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">First Name</label>
+          <input required name="firstName" value={formData.firstName} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="John" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-300">Last Name</label>
-          <input required name="lastName" value={formData.lastName} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Doe" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Last Name</label>
+          <input required name="lastName" value={formData.lastName} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Doe" />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-300">Business Email</label>
-          <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="john@company.com" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Business Email</label>
+          <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="john@company.com" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-300">Phone Number</label>
-          <input required name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="+977..." />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Phone Number</label>
+          <input required name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="+977..." />
         </div>
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-gray-300">Company Name</label>
-        <input required name="companyName" value={formData.companyName} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Acme Corp" />
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Company Name</label>
+        <input required name="companyName" value={formData.companyName} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Acme Corp" />
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-gray-300 flex justify-between">
-          <span>Website URL <span className="text-red-400">*</span></span>
-          <span className="text-xs text-indigo-400">Mandatory for approval</span>
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex justify-between transition-colors duration-300">
+          <span>Website URL <span className="text-red-500 dark:text-red-400">*</span></span>
+          <span className="text-xs text-indigo-600 dark:text-indigo-400">Mandatory for approval</span>
         </label>
-        <input required type="url" name="website" value={formData.website} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="https://www.company.com" />
+        <input required type="url" name="website" value={formData.website} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="https://www.company.com" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-300">Job Title</label>
-          <input required name="jobTitle" value={formData.jobTitle} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="CEO / IT Manager" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Job Title</label>
+          <input required name="jobTitle" value={formData.jobTitle} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="CEO / IT Manager" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-300">Telephony Setup</label>
-          <select name="pbxProfile" value={formData.pbxProfile} onChange={handleChange} className="w-full bg-[#1a1a1d] border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">Telephony Setup</label>
+          <select name="pbxProfile" value={formData.pbxProfile} onChange={handleChange} className="w-full bg-gray-50 dark:bg-[#1a1a1d] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
             <option value="NEW_SETUP">New Setup (Need SIP Trunk)</option>
             <option value="EXISTING_PBX">Existing IP-PBX</option>
             <option value="CLOUD_API">Twilio/Plivo/Cloud</option>
@@ -135,28 +135,28 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white flex items-center justify-center p-4 relative overflow-hidden py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0b] text-gray-900 dark:text-white flex items-center justify-center p-4 relative overflow-hidden py-12 transition-colors duration-300">
       {/* Background gradients */}
       <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[80px] pointer-events-none" />
 
       <div className="w-full max-w-2xl relative z-10">
-        <div className="bg-[#111113] rounded-3xl border border-gray-800 p-8 shadow-2xl shadow-indigo-900/10">
+        <div className="bg-white dark:bg-[#111113] rounded-3xl border border-gray-200 dark:border-gray-800 p-8 shadow-2xl dark:shadow-indigo-900/10 transition-colors duration-300">
           <div className="flex justify-center mb-6">
             <Link href="/">
               <div className="flex items-center gap-3">
                 <div className="bg-indigo-600 p-2.5 rounded-xl">
                   <Bot className="h-7 w-7 text-white" />
                 </div>
-                <span className="font-bold text-3xl tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                <span className="font-bold text-3xl tracking-tight bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
                   Nexus
                 </span>
               </div>
             </Link>
           </div>
 
-          <h2 className="text-2xl font-bold text-center text-white mb-2">Create an Account</h2>
-          <p className="text-center text-gray-400 mb-8 text-sm max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2 transition-colors duration-300">Create an Account</h2>
+          <p className="text-center text-gray-500 dark:text-gray-400 mb-8 text-sm max-w-md mx-auto transition-colors duration-300">
             Join the next-gen AI Voice platform. Fill out this application, and our Super Admin will review your details to approve access.
           </p>
 
@@ -164,10 +164,10 @@ export default function RegisterPage() {
             <RegisterForm />
           </Suspense>
 
-          <div className="mt-8 pt-6 border-t border-gray-800 text-center">
-            <p className="text-gray-400 text-sm">
+          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 text-center transition-colors duration-300">
+            <p className="text-gray-600 dark:text-gray-400 text-sm transition-colors duration-300">
               Already have an account?{' '}
-              <Link href="/login" className="font-semibold text-white hover:text-indigo-400 transition-colors">
+              <Link href="/login" className="font-semibold text-indigo-600 dark:text-white hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
                 Sign In
               </Link>
             </p>
