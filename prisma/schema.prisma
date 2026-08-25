@@ -74,6 +74,7 @@ model User {
   name           String?
   email          String        @unique
   phone          String?       @unique
+  avatarUrl      String?
   role           Role          @default(VIEWER)
   organizationId String?
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
@@ -589,11 +590,12 @@ model CrmTransaction {
 
   @@index([organizationId])
 }
+
 model OrganizationAiNode {
   id                 String       @id @default(cuid())
   organizationId     String
   organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  nodeType           String       // 'LLM', 'STT', 'TTS'
+  nodeType           String // 'LLM', 'STT', 'TTS'
   nodeName           String
   baseUrl            String
   encryptedAuthToken String?

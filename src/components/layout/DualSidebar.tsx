@@ -10,6 +10,7 @@ import {
   UserCircle, Workflow, Zap, Headphones, Globe
 } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
+import { UserProfileModal } from '@/components/profile/UserProfileModal';
 
 const MAIN_MODULES = [
   { id: 'dashboard', icon: BarChart3, label: 'Dashboard', href: '/capabilities/dashboard' },
@@ -51,6 +52,7 @@ export const DualSidebar = ({ role }: { role?: string }) => {
   ) || MAIN_MODULES[0];
 
   const [activeModule, setActiveModule] = useState(initialModule);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     // Keep sidebar synced when route changes
@@ -108,7 +110,10 @@ export const DualSidebar = ({ role }: { role?: string }) => {
         </div>
 
         <div className="w-full flex flex-col items-center gap-2 mt-auto">
-           <button className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors">
+           <button 
+              onClick={() => setIsProfileOpen(true)}
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors"
+           >
               <UserCircle className="w-5 h-5" />
            </button>
            <button onClick={handleSignOut} className="w-10 h-10 flex items-center justify-center rounded-xl text-red-500/70 hover:text-red-400 hover:bg-red-950/30 transition-colors">
@@ -160,6 +165,13 @@ export const DualSidebar = ({ role }: { role?: string }) => {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Profile Modal */}
+      {isProfileOpen && (
+        <UserProfileModal 
+          isOpen={isProfileOpen} 
+          onClose={() => setIsProfileOpen(false)} 
+        />
+      )}
     </div>
   );
 };

@@ -13,10 +13,10 @@ export default async function OrgDashboardLayout({ children }: { children: React
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-200 overflow-hidden">
+    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 overflow-hidden transition-colors duration-300">
       <DualSidebar role="ORG_ADMIN" />
       
-      <div className="flex-1 flex flex-col relative overflow-hidden bg-slate-950">
+      <div className="flex-1 flex flex-col relative overflow-hidden bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
         <HeaderCreditBar />
         
         {/* Main Content Area */}

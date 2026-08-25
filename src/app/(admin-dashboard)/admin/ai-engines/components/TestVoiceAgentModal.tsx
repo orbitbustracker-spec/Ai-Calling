@@ -270,14 +270,6 @@ export default function TestVoiceAgentModal({
               </div>
             )}
             
-            {/* ELEVENLABS CONVERSATIONAL AI WIDGET INJECTION */}
-            <div className="mt-8 pt-6 border-t border-slate-800 text-center">
-              <h3 className="text-sm font-bold text-slate-300 mb-2">Or test your full ElevenLabs Agent directly:</h3>
-              <p className="text-xs text-slate-500 mb-4">Click the Voice Orb that just appeared in the bottom right corner of your screen!</p>
-              
-              <div dangerouslySetInnerHTML={{ __html: '<elevenlabs-convai agent-id="agent_0201m02r86vhe1tsrg1emra0q7ap"></elevenlabs-convai>' }} />
-            </div>
-
           </div>
         </motion.div>
       </div>
