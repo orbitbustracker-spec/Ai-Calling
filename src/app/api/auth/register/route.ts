@@ -45,7 +45,7 @@ export async function POST(req: Request) {
                <p>Thank you,<br/>Nexus Team</p>`
       };
       
-      await transporter.sendMail(mailOptions).catch(err => {
+      await transporter.sendMail(mailOptions).catch((err: any) => {
         console.error("Failed to send registration email", err);
       });
     } else {
