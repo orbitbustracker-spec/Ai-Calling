@@ -11,11 +11,16 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder';
-  
-  const supabase = createBrowserClient(supabaseUrl, supabaseKey);
-
+  const [supabase] = useState(() => {
+    try {
+      return createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
+      );
+    } catch (e) {
+      return { auth: { resetPasswordForEmail: async () => ({ error: { message: 'Invalid Supabase Configuration' } }) } } as any;
+    }
+  });
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

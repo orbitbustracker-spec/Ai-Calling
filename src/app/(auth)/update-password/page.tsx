@@ -12,10 +12,17 @@ export default function UpdatePasswordPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const [supabase] = useState(() => {
+    try {
+      return createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
+      );
+    } catch (e) {
+      // Return a dummy client or handle error gracefully during prerender if env vars are invalid
+      return { auth: { updateUser: async () => ({ error: { message: 'Invalid Supabase Configuration' } }) } } as any;
+    }
+  });
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
