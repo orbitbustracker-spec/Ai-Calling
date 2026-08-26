@@ -33,8 +33,16 @@ export async function updateSession(request: NextRequest) {
     // Exchange the code for a session
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      // Successfully authenticated! Redirect to next or admin dashboard
-      const next = request.nextUrl.searchParams.get('next') || '/admin'
+      // Successfully authenticated! 
+      let next = request.nextUrl.searchParams.get('next')
+      if (!next) {
+        if (request.nextUrl.pathname === '/update-password' || request.nextUrl.pathname === '/activate') {
+          next = request.nextUrl.pathname;
+        } else {
+          next = '/admin';
+        }
+      }
+      
       const redirectUrl = request.nextUrl.clone()
       redirectUrl.pathname = next
       redirectUrl.searchParams.delete('code')

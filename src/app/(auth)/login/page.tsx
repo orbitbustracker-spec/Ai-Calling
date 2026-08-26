@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/Button';
@@ -12,6 +12,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  
+  const [urlError, setUrlError] = useState<string | null>(null);
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.get('error')) {
+      setUrlError(searchParams.get('error')!);
+    }
+  }, []);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -76,6 +84,12 @@ export default function LoginPage() {
           
           <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white tracking-tight transition-colors duration-300">Welcome Back</h1>
           <p className="text-gray-500 dark:text-gray-400 text-center mt-2 mb-8 transition-colors duration-300">Sign in to your enterprise dashboard</p>
+
+          {urlError && (
+            <div className="bg-red-500/10 text-red-500 p-4 rounded-xl text-sm mb-6 border border-red-500/20">
+              {urlError}
+            </div>
+          )}
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
