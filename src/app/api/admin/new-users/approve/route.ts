@@ -48,7 +48,9 @@ export async function POST(req: Request) {
                <p>Thank you,<br/>Nexus Team</p>`
       };
 
-      await transporter.sendMail(mailOptions);
+      await transporter.sendMail(mailOptions).catch((err: any) => {
+        console.error("Failed to send approval email", err);
+      });
     } else {
       console.warn("SMTP environment variables not configured. Skipping email sending.");
     }

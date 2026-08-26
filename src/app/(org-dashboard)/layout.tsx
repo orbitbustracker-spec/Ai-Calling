@@ -20,7 +20,7 @@ export default async function OrgDashboardLayout({ children }: { children: React
         <HeaderCreditBar />
         
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative z-10">
+        <main className="flex-1 overflow-y-auto p-4 pt-20 md:p-6 lg:p-8 relative z-10">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>

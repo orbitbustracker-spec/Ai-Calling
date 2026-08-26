@@ -54,6 +54,8 @@ export const DualSidebar = ({ role }: { role?: string }) => {
   const [activeModule, setActiveModule] = useState(initialModule);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
+  const [isOpenMobile, setIsOpenMobile] = useState(false);
+
   useEffect(() => {
     // Keep sidebar synced when route changes
     const current = MAIN_MODULES.find(m => 
@@ -61,6 +63,7 @@ export const DualSidebar = ({ role }: { role?: string }) => {
       m.subItems?.some(sub => pathname.startsWith(sub.href.split('?')[0]))
     );
     if (current) setActiveModule(current);
+    setIsOpenMobile(false); // Close sidebar on mobile route change
   }, [pathname]);
 
   const handleSignOut = async () => {
@@ -73,105 +76,126 @@ export const DualSidebar = ({ role }: { role?: string }) => {
     setActiveModule(module);
     if (!module.subItems && module.href) {
       router.push(module.href);
+      setIsOpenMobile(false);
     }
   };
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-300 font-sans border-r border-white/10 shrink-0 relative z-50">
-      
-      {/* Primary Icon Rail */}
-      <div className="w-16 flex flex-col items-center py-4 bg-slate-950/80 backdrop-blur-md border-r border-white/5 z-20">
-        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-black text-xl mb-8 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
-          Nx
-        </div>
-
-        <div className="flex-1 w-full flex flex-col items-center gap-2">
-          {MAIN_MODULES.map(module => {
-            const Icon = module.icon;
-            const isActive = activeModule.id === module.id;
-            return (
-              <button
-                key={module.id}
-                onClick={() => handleModuleClick(module)}
-                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-300 relative group ${isActive ? 'bg-indigo-500/20 text-indigo-400' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800'}`}
-              >
-                <Icon className="w-5 h-5" />
-                {isActive && (
-                  <motion.div layoutId="activeRail" className="absolute left-0 w-1 h-6 bg-indigo-500 rounded-r-full" />
-                )}
-                
-                {/* Tooltip */}
-                <div className="absolute left-14 px-2 py-1 bg-slate-800 text-slate-200 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
-                  {module.label}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="w-full flex flex-col items-center gap-2 mt-auto">
-           <button 
-              onClick={() => setIsProfileOpen(true)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors"
-           >
-              <UserCircle className="w-5 h-5" />
-           </button>
-           <button onClick={handleSignOut} className="w-10 h-10 flex items-center justify-center rounded-xl text-red-500/70 hover:text-red-400 hover:bg-red-950/30 transition-colors">
-              <LogOut className="w-5 h-5" />
-           </button>
-        </div>
+    <>
+      {/* Mobile Header with Hamburger */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-slate-950 border-b border-white/10 z-50 flex items-center px-4">
+        <button onClick={() => setIsOpenMobile(!isOpenMobile)} className="text-white p-2">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <span className="font-bold text-xl ml-4 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Nexus</span>
       </div>
 
-      {/* Secondary Dynamic Menu */}
-      <AnimatePresence mode="wait">
-        {activeModule.subItems && activeModule.subItems.length > 0 && (
-          <motion.div 
-            key={activeModule.id}
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 224, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="bg-slate-900/50 backdrop-blur-xl border-r border-white/5 flex flex-col z-10 relative overflow-hidden overflow-y-auto"
-          >
-            {/* Subtle Background Glow */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
-  
-            <div className="p-6 shrink-0 w-56">
-              <h2 className="text-sm font-bold text-slate-100 tracking-wide uppercase">{activeModule.label}</h2>
-            </div>
-  
-            <div className="flex-1 px-4 space-y-1 w-56">
-              {activeModule.subItems.map((item: any) => {
-                // If it contains query param like ?view=..., we check exact match on client or roughly
-                const isExact = typeof window !== 'undefined' && window.location.search ? pathname + window.location.search === item.href : pathname === item.href;
-                // Basic fallback for path-only match
-                const isActive = isExact || (pathname === item.href.split('?')[0] && !window.location.search && activeModule.subItems?.[0]?.href === item.href);
-
-                return (
-                  <Link 
-                    key={item.href} 
-                    href={item.href}
-                    className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                      isActive 
-                      ? 'bg-indigo-500/15 text-indigo-400 shadow-[inset_2px_0_0_rgba(99,102,241,1)]' 
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                )
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {/* Profile Modal */}
-      {isProfileOpen && (
-        <UserProfileModal 
-          isOpen={isProfileOpen} 
-          onClose={() => setIsProfileOpen(false)} 
+      {/* Mobile Overlay */}
+      {isOpenMobile && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/60 z-40"
+          onClick={() => setIsOpenMobile(false)}
         />
       )}
-    </div>
+
+      {/* Sidebar Container */}
+      <div className={`fixed md:relative top-0 left-0 h-screen bg-slate-950 text-slate-300 font-sans border-r border-white/10 shrink-0 z-50 flex transition-transform duration-300 ${isOpenMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} pt-16 md:pt-0`}>
+        
+        {/* Primary Icon Rail */}
+        <div className="w-16 flex flex-col items-center py-4 bg-slate-950/80 backdrop-blur-md border-r border-white/5 z-20">
+          <div className="hidden md:flex w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl items-center justify-center text-white font-black text-xl mb-8 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+            Nx
+          </div>
+
+          <div className="flex-1 w-full flex flex-col items-center gap-2 mt-4 md:mt-0">
+            {MAIN_MODULES.map(module => {
+              const Icon = module.icon;
+              const isActive = activeModule.id === module.id;
+              return (
+                <button
+                  key={module.id}
+                  onClick={() => handleModuleClick(module)}
+                  className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-300 relative group ${isActive ? 'bg-indigo-500/20 text-indigo-400' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800'}`}
+                >
+                  <Icon className="w-5 h-5" />
+                  {isActive && (
+                    <motion.div layoutId="activeRail" className="absolute left-0 w-1 h-6 bg-indigo-500 rounded-r-full" />
+                  )}
+                  
+                  {/* Tooltip */}
+                  <div className="absolute left-14 px-2 py-1 bg-slate-800 text-slate-200 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
+                    {module.label}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="w-full flex flex-col items-center gap-2 mt-auto">
+             <button 
+                onClick={() => setIsProfileOpen(true)}
+                className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors"
+             >
+                <UserCircle className="w-5 h-5" />
+             </button>
+             <button onClick={handleSignOut} className="w-10 h-10 flex items-center justify-center rounded-xl text-red-500/70 hover:text-red-400 hover:bg-red-950/30 transition-colors">
+                <LogOut className="w-5 h-5" />
+             </button>
+          </div>
+        </div>
+
+        {/* Secondary Dynamic Menu */}
+        <AnimatePresence mode="wait">
+          {activeModule.subItems && activeModule.subItems.length > 0 && (
+            <motion.div 
+              key={activeModule.id}
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 224, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="bg-slate-900/50 backdrop-blur-xl border-r border-white/5 flex flex-col z-10 relative overflow-hidden overflow-y-auto"
+            >
+              {/* Subtle Background Glow */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+    
+              <div className="p-6 shrink-0 w-56">
+                <h2 className="text-sm font-bold text-slate-100 tracking-wide uppercase">{activeModule.label}</h2>
+              </div>
+    
+              <div className="flex-1 px-4 space-y-1 w-56">
+                {activeModule.subItems.map((item: any) => {
+                  const isExact = typeof window !== 'undefined' && window.location.search ? pathname + window.location.search === item.href : pathname === item.href;
+                  const isActive = isExact || (pathname === item.href.split('?')[0] && !window.location.search && activeModule.subItems?.[0]?.href === item.href);
+
+                  return (
+                    <Link 
+                      key={item.href} 
+                      href={item.href}
+                      onClick={() => setIsOpenMobile(false)}
+                      className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                        isActive 
+                        ? 'bg-indigo-500/15 text-indigo-400 shadow-[inset_2px_0_0_rgba(99,102,241,1)]' 
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  )
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {/* Profile Modal */}
+        {isProfileOpen && (
+          <UserProfileModal 
+            isOpen={isProfileOpen} 
+            onClose={() => setIsProfileOpen(false)} 
+          />
+        )}
+      </div>
+    </>
   );
 };

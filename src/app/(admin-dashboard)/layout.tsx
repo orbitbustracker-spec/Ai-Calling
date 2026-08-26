@@ -1,4 +1,4 @@
-﻿export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 import { requireSuperAdmin } from "@/lib/authorization";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -15,9 +15,9 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
   }
 
   return (
-    <div className="flex h-screen bg-[#0a0a0b] text-gray-200">
+    <div className="flex h-screen bg-[#0a0a0b] text-gray-200 overflow-hidden">
       <Sidebar role="SUPER_ADMIN" />
-      <main className="flex-1 p-8 overflow-y-auto bg-slate-950 text-slate-300 rounded-tl-3xl shadow-2xl mt-2 ml-2">
+      <main className="flex-1 p-6 pt-20 md:p-8 md:mt-2 md:ml-2 overflow-y-auto bg-slate-950 text-slate-300 md:rounded-tl-3xl shadow-2xl relative">
         {children}
       </main>
     </div>
