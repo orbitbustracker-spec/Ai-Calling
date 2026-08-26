@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     );
 
     const email = 'baraldhar@gmail.com';
-    const password = 'Istuti@98510';
+    const password = 'Istuti98510';
 
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
     
     if (signInError && authError?.message === 'User already registered') {
       return NextResponse.json({ 
-        error: 'User already exists in Supabase Auth but password is not Istuti@98510. Please delete the user from Supabase dashboard and hit this endpoint again.' 
+        error: 'User already exists in Supabase Auth but password is not Istuti98510. Please delete the user from Supabase dashboard and hit this endpoint again.' 
       }, { status: 400 });
     }
 
@@ -40,11 +40,11 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Failed to get user after sign up/in' }, { status: 500 });
     }
 
-    await prisma.$executeRawUnsafe(
+    await prisma.$executeRawUnsafe(`
       UPDATE auth.users 
       SET email_confirmed_at = NOW()
       WHERE email = $1;
-    , email);
+    `, email);
 
     await prisma.user.upsert({
       where: { email },
@@ -57,7 +57,7 @@ export async function GET(req: Request) {
       }
     });
 
-    return NextResponse.json({ success: true, message: Super Admin  verified and updated successfully! });
+    return NextResponse.json({ success: true, message: `Super Admin ${email} verified and updated successfully!` });
 
   } catch (error: any) {
     console.error('Seed Super Admin Error:', error);
