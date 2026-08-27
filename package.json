@@ -15,6 +15,7 @@
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.3",
     "@types/bcryptjs": "^2.4.6",
+    "@xyflow/react": "^12.11.5",
     "alawmulaw": "^6.0.0",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",

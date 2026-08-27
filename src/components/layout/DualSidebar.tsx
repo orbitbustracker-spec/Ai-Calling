@@ -14,6 +14,7 @@ import { UserProfileModal } from '@/components/profile/UserProfileModal';
 
 const MAIN_MODULES = [
   { id: 'dashboard', icon: BarChart3, label: 'Dashboard', href: '/capabilities/dashboard' },
+  { id: 'pipeline', icon: Workflow, label: 'AI Pipeline Builder', href: '/capabilities/pipeline' },
   { id: 'crm', icon: Users, label: 'Customer CRM', subItems: [
     { label: 'Activity', href: '/capabilities/customer-crm?view=activity' },
     { label: 'Reminder', href: '/capabilities/customer-crm?view=reminder' },
@@ -188,14 +189,15 @@ export const DualSidebar = ({ role }: { role?: string }) => {
             </motion.div>
           )}
         </AnimatePresence>
-        {/* Profile Modal */}
-        {isProfileOpen && (
-          <UserProfileModal 
-            isOpen={isProfileOpen} 
-            onClose={() => setIsProfileOpen(false)} 
-          />
-        )}
       </div>
+
+      {/* Profile Modal - MUST BE OUTSIDE THE TRANSFORM CONTAINER */}
+      {isProfileOpen && (
+        <UserProfileModal 
+          isOpen={isProfileOpen} 
+          onClose={() => setIsProfileOpen(false)} 
+        />
+      )}
     </>
   );
 };
