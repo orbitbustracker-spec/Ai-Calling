@@ -58,7 +58,7 @@ export default async function CapabilityPage({ params }: { params: Promise<{ slu
           <p className="text-gray-500 mt-1">Manage settings and integrations for this capability.</p>
         </div>
         
-        <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+        <div className="glass-panel rounded-2xl p-8">
           <Component />
         </div>
       </div>

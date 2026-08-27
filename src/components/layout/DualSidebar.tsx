@@ -102,10 +102,10 @@ export const DualSidebar = ({ role }: { role?: string }) => {
       )}
 
       {/* Sidebar Container */}
-      <div className={`fixed md:relative top-0 left-0 h-screen bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-sans border-r border-gray-200 dark:border-white/10 shrink-0 z-50 flex transition-transform duration-300 ${isOpenMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} pt-16 md:pt-0`}>
+      <div className={`fixed md:relative top-0 left-0 h-screen glass-panel text-slate-700 dark:text-slate-300 font-sans shrink-0 z-50 flex transition-transform duration-300 ${isOpenMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} pt-16 md:pt-0`}>
         
         {/* Primary Icon Rail */}
-        <div className="w-16 flex flex-col items-center py-4 bg-white/90 dark:bg-slate-950/80 backdrop-blur-md border-r border-gray-200 dark:border-white/5 z-20">
+        <div className="w-16 flex flex-col items-center py-4 bg-transparent border-r border-gray-200 dark:border-white/10 z-20">
           <div className="hidden md:flex w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl items-center justify-center text-slate-900 dark:text-white font-black text-xl mb-8 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
             Nx
           </div>
@@ -156,7 +156,7 @@ export const DualSidebar = ({ role }: { role?: string }) => {
               animate={{ width: 224, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="bg-gray-50/90 dark:bg-slate-900/50 backdrop-blur-xl border-r border-gray-200 dark:border-white/5 flex flex-col z-10 relative overflow-hidden overflow-y-auto"
+              className="glass-panel flex flex-col z-10 relative overflow-hidden overflow-y-auto border-l border-white/5"
             >
               {/* Subtle Background Glow */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />

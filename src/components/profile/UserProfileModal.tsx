@@ -98,9 +98,9 @@ export function UserProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-900/50 dark:bg-slate-950/80 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-white/10 bg-gray-50/50 dark:bg-slate-900/50">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-900/40 dark:bg-slate-950/60 backdrop-blur-md">
+      <div className="w-full max-w-2xl glass-card rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100/20 dark:border-white/10 bg-white/20 dark:bg-slate-900/30">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">Profile & Settings</h2>
           <button onClick={onClose} className="p-2 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors">
             <X className="w-5 h-5" />

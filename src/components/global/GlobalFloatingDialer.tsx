@@ -55,10 +55,10 @@ export function GlobalFloatingDialer() {
             initial={{ y: 50, opacity: 0, scale: 0.9 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 50, opacity: 0, scale: 0.9 }}
-            className="fixed bottom-8 right-8 w-80 bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-3xl shadow-2xl z-[100] flex flex-col overflow-hidden"
+            className="fixed bottom-8 right-8 w-80 glass-card rounded-3xl z-[100] flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="p-4 border-b border-gray-100 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-slate-950/50 cursor-grab active:cursor-grabbing">
+            <div className="p-4 border-b border-gray-100/20 dark:border-white/10 flex justify-between items-center bg-white/20 dark:bg-slate-900/30 cursor-grab active:cursor-grabbing">
               <h3 className="text-gray-900 dark:text-white font-semibold flex items-center gap-2">
                 <Phone className="w-4 h-4 text-indigo-600 dark:text-indigo-400" /> WebRTC Dialer
               </h3>

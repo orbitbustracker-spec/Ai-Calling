@@ -48,26 +48,26 @@ export default function CampaignsConfig() {
           
           {/* Global KPI Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-sm">
+            <div className="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-sm">
               <div className="text-xs font-bold text-gray-500 dark:text-slate-500 uppercase">Active Agents</div>
               <div className="text-2xl font-black text-gray-900 dark:text-white mt-2 flex items-center justify-between">
                 17 <Users className="w-5 h-5 text-blue-500" />
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div className="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-sm relative overflow-hidden">
               <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl" />
               <div className="text-xs font-bold text-gray-500 dark:text-slate-500 uppercase">Calls Ringing</div>
               <div className="text-2xl font-black text-gray-900 dark:text-white mt-2 flex items-center justify-between relative z-10">
                 34 <PhoneOutgoing className="w-5 h-5 text-emerald-500" />
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-sm">
+            <div className="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-sm">
               <div className="text-xs font-bold text-gray-500 dark:text-slate-500 uppercase">Live Connections</div>
               <div className="text-2xl font-black text-gray-900 dark:text-white mt-2 flex items-center justify-between">
                 8 <Activity className="w-5 h-5 text-indigo-500" />
               </div>
             </div>
-            <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div className="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-sm relative overflow-hidden">
               <div className="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-full blur-xl" />
               <div className="text-xs font-bold text-gray-500 dark:text-slate-500 uppercase">Drop Rate (Today)</div>
               <div className="text-2xl font-black text-gray-900 dark:text-white mt-2 flex items-center justify-between relative z-10">
@@ -77,7 +77,7 @@ export default function CampaignsConfig() {
           </div>
 
           {/* Active Campaigns Table */}
-          <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm">
+          <div className="glass-card rounded-2xl overflow-hidden shadow-sm">
             <div className="p-5 border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-900/80">
               <h3 className="font-bold text-gray-900 dark:text-white">Active Campaigns Dashboard</h3>
             </div>

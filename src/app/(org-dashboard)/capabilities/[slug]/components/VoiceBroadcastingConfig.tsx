@@ -39,7 +39,7 @@ export default function VoiceBroadcastingConfig() {
           <div className="lg:col-span-2 space-y-6">
             
             {/* Audio Source */}
-            <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-gray-200 dark:border-white/10 p-6 shadow-sm">
+            <div className="glass-card rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Volume2 className="w-5 h-5 text-indigo-500" /> 1. Audio Source
               </h3>
@@ -77,7 +77,7 @@ export default function VoiceBroadcastingConfig() {
             </div>
 
             {/* Audience */}
-            <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-gray-200 dark:border-white/10 p-6 shadow-sm">
+            <div className="glass-card rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-indigo-500" /> 2. Target Audience
               </h3>
@@ -99,7 +99,7 @@ export default function VoiceBroadcastingConfig() {
 
           {/* Right Column - Settings & Launch */}
           <div className="space-y-6">
-            <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-gray-200 dark:border-white/10 p-6 shadow-sm">
+            <div className="glass-card rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Settings2 className="w-5 h-5 text-indigo-500" /> 3. Broadcast Settings
               </h3>

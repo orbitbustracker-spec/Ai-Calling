@@ -28,7 +28,7 @@ export const HeaderCreditBar = () => {
 
   return (
     <>
-      <div className="h-16 w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 shrink-0 relative z-40 transition-colors">
+      <div className="h-16 w-full glass-panel border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 shrink-0 relative z-40 transition-colors">
         <div className="flex items-center gap-4">
           <h2 className="text-gray-900 dark:text-white font-bold text-lg hidden sm:block">Voice Engine Hub</h2>
         </div>
@@ -77,14 +77,14 @@ export const HeaderCreditBar = () => {
       {/* Top Up Modal Overlay */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 dark:bg-slate-950/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 dark:bg-slate-950/60 backdrop-blur-md">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+              className="glass-card rounded-2xl w-full max-w-md overflow-hidden"
             >
-              <div className="p-6 border-b border-gray-100 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-slate-800/50">
+              <div className="p-6 border-b border-gray-100/20 dark:border-white/10 flex justify-between items-center bg-white/10 dark:bg-slate-800/30">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                   <Zap className="w-5 h-5 text-indigo-600 dark:text-indigo-400"/> Quick Recharge
                 </h3>
