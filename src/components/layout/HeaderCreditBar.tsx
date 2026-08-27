@@ -28,44 +28,44 @@ export const HeaderCreditBar = () => {
 
   return (
     <>
-      <div className="h-16 w-full bg-slate-950/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-6 shrink-0 relative z-40">
+      <div className="h-16 w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 shrink-0 relative z-40 transition-colors">
         <div className="flex items-center gap-4">
-          <h2 className="text-white font-bold text-lg hidden sm:block">Voice Engine Hub</h2>
+          <h2 className="text-gray-900 dark:text-white font-bold text-lg hidden sm:block">Voice Engine Hub</h2>
         </div>
 
         {/* Global Credit Status */}
         <div className="flex items-center gap-3">
           
-          <div className="hidden md:flex items-center gap-4 bg-slate-900 border border-white/10 rounded-xl px-4 py-1.5 h-10">
+          <div className="hidden md:flex items-center gap-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-1.5 h-10">
             {/* Voice Credit */}
-            <div className="flex items-center gap-2 border-r border-white/10 pr-4">
-              <PhoneCall className="w-4 h-4 text-emerald-400" />
+            <div className="flex items-center gap-2 border-r border-gray-200 dark:border-white/10 pr-4">
+              <PhoneCall className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <div className="flex flex-col">
-                <span className="text-[10px] text-slate-500 font-bold uppercase leading-tight">Voice Min</span>
-                <span className="text-sm font-black text-white leading-tight">{balance.remainingMinutes.toLocaleString()}</span>
+                <span className="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase leading-tight">Voice Min</span>
+                <span className="text-sm font-black text-gray-900 dark:text-white leading-tight">{balance.remainingMinutes.toLocaleString()}</span>
               </div>
             </div>
 
             {/* Omnichannel Credit (Calculated dynamically) */}
             <div className="flex items-center gap-2">
-              <MessageSquare className="w-4 h-4 text-blue-400" />
+              <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <div className="flex flex-col">
-                <span className="text-[10px] text-slate-500 font-bold uppercase leading-tight">Texts / WhatsApp</span>
-                <span className="text-sm font-black text-white leading-tight">~{textCredits.toLocaleString()}</span>
+                <span className="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase leading-tight">Texts / WhatsApp</span>
+                <span className="text-sm font-black text-gray-900 dark:text-white leading-tight">~{textCredits.toLocaleString()}</span>
               </div>
             </div>
           </div>
 
           {/* Wallet Balance & Top Up Button */}
-          <div className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-1 h-10 pl-4">
+          <div className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 rounded-xl p-1 h-10 pl-4">
             <div className="flex items-center gap-2 mr-2">
-              <Wallet className="w-4 h-4 text-indigo-400" />
-              <span className="text-sm font-black text-indigo-100">Rs. {balance.walletBalanceNpr.toLocaleString()}</span>
+              <Wallet className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span className="text-sm font-black text-indigo-700 dark:text-indigo-100">Rs. {balance.walletBalanceNpr.toLocaleString()}</span>
             </div>
             
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white h-8 px-3 rounded-lg flex items-center gap-1 font-bold text-xs transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white h-8 px-3 rounded-lg flex items-center gap-1 font-bold text-xs transition-colors"
             >
               <Plus className="w-3 h-3" /> Top Up
             </button>
@@ -77,18 +77,18 @@ export const HeaderCreditBar = () => {
       {/* Top Up Modal Overlay */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 dark:bg-slate-950/80 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+              className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
             >
-              <div className="p-6 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-indigo-400"/> Quick Recharge
+              <div className="p-6 border-b border-gray-100 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-slate-800/50">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-indigo-600 dark:text-indigo-400"/> Quick Recharge
                 </h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-slate-500 hover:text-white transition-colors">
+                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-700 dark:text-slate-500 dark:hover:text-white transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -96,25 +96,25 @@ export const HeaderCreditBar = () => {
               <div className="p-6">
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   {['1000', '5000', '10000', '25000'].map((amt) => (
-                    <button key={amt} className="py-3 rounded-xl bg-slate-950 border border-white/5 hover:border-indigo-500/50 text-slate-300 font-bold text-sm transition-all hover:bg-indigo-500/10 hover:text-indigo-300">
+                    <button key={amt} className="py-3 rounded-xl bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/5 hover:border-indigo-500/50 text-gray-700 dark:text-slate-300 font-bold text-sm transition-all hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-700 dark:hover:text-indigo-300">
                       Rs. {amt}
                     </button>
                   ))}
                 </div>
 
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-500">Rs.</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-500">Rs.</span>
                   <input 
                     type="number" 
                     placeholder="Custom Amount" 
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white font-bold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-gray-900 dark:text-white font-bold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
                   />
                 </div>
 
-                <button className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl py-3 shadow-[0_0_15px_rgba(79,70,229,0.3)] transition-all">
+                <button className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl py-3 shadow-md transition-all">
                   Proceed to Payment
                 </button>
-                <p className="text-center text-[10px] text-slate-500 mt-4 uppercase font-bold tracking-wider">
+                <p className="text-center text-[10px] text-gray-500 mt-4 uppercase font-bold tracking-wider">
                   Secure Payments via eSewa, Khalti, & ConnectIPS
                 </p>
               </div>
