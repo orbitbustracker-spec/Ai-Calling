@@ -1,12 +1,29 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Phone, X, Delete, PhoneCall, User, GripHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function GlobalFloatingDialer() {
   const [isOpen, setIsOpen] = useState(false);
   const [number, setNumber] = useState('');
+  const dialerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dialerRef.current && !dialerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleDial = (digit: string) => {
     setNumber(prev => prev + digit);
@@ -34,6 +51,7 @@ export function GlobalFloatingDialer() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={dialerRef}
             initial={{ y: 50, opacity: 0, scale: 0.9 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 50, opacity: 0, scale: 0.9 }}
