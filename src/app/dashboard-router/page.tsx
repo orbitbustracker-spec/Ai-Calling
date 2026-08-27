@@ -32,7 +32,19 @@ export default async function DashboardRouter() {
   
   if (user.role === 'SUPER_ADMIN') { 
     redirect('/admin/analytics/usage'); 
-  } else { 
+  } else if (user.organizationId) { 
     redirect('/capabilities/dashboard'); 
-  } 
+  } else {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0a0a0b] p-4 text-center">
+        <div className="bg-white dark:bg-[#111113] p-8 rounded-3xl border border-yellow-500/30 max-w-lg shadow-xl shadow-yellow-900/10">
+          <h1 className="text-2xl font-bold text-yellow-500 mb-4">No Organization Assigned</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Your account does not belong to any organization. Please ask a Super Admin to assign you to an organization in the Users & Approvals dashboard.
+          </p>
+          <a href="/login" className="text-indigo-500 hover:underline">Return to Login</a>
+        </div>
+      </div>
+    );
+  }
 }
