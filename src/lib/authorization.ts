@@ -23,27 +23,21 @@ export async function getCurrentUser() {
 
   // Local Dev Fallback: If user exists in Supabase but not in local DB with that ID
   if (!dbUser && user.email) {
-    // Check if the user exists by email (in case Supabase ID changed due to deletion/re-creation)
-    const existingByEmail = await prisma.user.findUnique({
-      where: { email: user.email }
-    });
-
-    if (existingByEmail) {
-      // Update the Prisma user to use the new Supabase ID
-      dbUser = await prisma.user.update({
+    try {
+      dbUser = await prisma.user.upsert({
         where: { email: user.email },
-        data: { id: user.id }
-      });
-    } else {
-      // User completely new, create them
-      dbUser = await prisma.user.create({
-        data: {
+        update: { id: user.id },
+        create: {
           id: user.id,
           email: user.email,
           name: user.user_metadata?.full_name || 'Admin User',
           role: Role.SUPER_ADMIN, 
         }
       });
+    } catch (e) {
+      console.error('Failed to upsert user during auth fallback:', e);
+      // In case of extreme race conditions, try fetching one last time
+      dbUser = await prisma.user.findUnique({ where: { email: user.email } });
     }
   }
 
