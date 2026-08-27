@@ -33,7 +33,7 @@ export default function DashboardPage() {
         
         {/* Technical Details (PBX/SIP) */}
         <div className="lg:col-span-2 grid grid-cols-3 gap-4">
-          <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 relative overflow-hidden group shadow-sm">
+          <div className="glass-card rounded-2xl p-6 relative overflow-hidden group shadow-sm">
             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all pointer-events-none" />
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center">
@@ -51,7 +51,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 relative overflow-hidden group shadow-sm">
+          <div className="glass-card rounded-2xl p-6 relative overflow-hidden group shadow-sm">
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all pointer-events-none" />
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-xl flex items-center justify-center">
@@ -67,7 +67,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl p-6 relative overflow-hidden group shadow-sm">
+          <div className="glass-card rounded-2xl p-6 relative overflow-hidden group shadow-sm">
             <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all pointer-events-none" />
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-500/10 rounded-xl flex items-center justify-center">
@@ -78,51 +78,24 @@ export default function DashboardPage() {
                 <div className="text-lg font-black text-gray-900 dark:text-white leading-tight">103.245.X.X</div>
               </div>
             </div>
-      {/* Core KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <div className="glass-card rounded-2xl p-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
-          <h3 className="text-xs font-bold text-gray-500 dark:text-slate-500 uppercase tracking-wider mb-4">SIP Trunk Status</h3>
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="text-2xl font-black text-gray-900 dark:text-white leading-tight">Online</div>
-              <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-1">(Registered)</div>
+            <div className="text-xs font-medium text-gray-500 dark:text-slate-400 relative z-10">
+              Static Gateway
             </div>
-            <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center">
-              <Network className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-            </div>
-          </div>
-          <div className="mt-6 flex items-center gap-2 text-xs font-bold text-gray-500 dark:text-slate-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> 12 Active Channels
           </div>
         </div>
 
-        <div className="glass-card rounded-2xl p-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
-          <h3 className="text-xs font-bold text-gray-500 dark:text-slate-500 uppercase tracking-wider mb-4">PBX System</h3>
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="text-2xl font-black text-gray-900 dark:text-white leading-tight">Asterisk v20</div>
-            </div>
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-xl flex items-center justify-center">
-              <Server className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            </div>
-          </div>
-          <div className="mt-6 text-xs text-gray-500 dark:text-slate-400 font-medium">Cloud Hosted (V2)</div>
-        </div>
-
-        <div className="glass-card rounded-2xl p-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Announcements */}
+        <div className="glass-card rounded-2xl p-6 relative overflow-hidden shadow-sm">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 relative z-10">
-            <Megaphone className="w-5 h-5 text-indigo-600 dark:text-indigo-400" /> Announcements
+            <Megaphone className="w-5 h-5 text-indigo-500 dark:text-indigo-400" /> Announcements
           </h3>
           <div className="space-y-4 relative z-10">
-            <div className="bg-white/40 dark:bg-slate-950/30 rounded-xl p-4 border border-gray-100 dark:border-white/5">
+            <div className="bg-white/40 dark:bg-slate-950/30 rounded-xl p-4 border border-gray-100/20 dark:border-white/5">
               <div className="text-sm font-bold text-indigo-700 dark:text-indigo-300 mb-1">System Maintenance</div>
               <p className="text-xs text-gray-600 dark:text-slate-300">Scheduled downtime on Aug 25, 2AM-4AM for PBX upgrades.</p>
             </div>
-            <div className="bg-white/40 dark:bg-slate-950/30 rounded-xl p-4 border border-gray-100 dark:border-white/5">
+            <div className="bg-white/40 dark:bg-slate-950/30 rounded-xl p-4 border border-gray-100/20 dark:border-white/5">
               <div className="text-sm font-bold text-indigo-700 dark:text-indigo-300 mb-1">New Feature Alert</div>
               <p className="text-xs text-gray-600 dark:text-slate-300">Omnichannel Social Commerce is now live in your workspace!</p>
             </div>
