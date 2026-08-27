@@ -25,14 +25,24 @@ const nodeTypes = {
 };
 
 const initialNodes: Node[] = [
-  { id: '1', type: 'custom', position: { x: 250, y: 100 }, data: { label: 'Source files', icon: 'source', color: 'blue', type: 'trigger', sublabel: 'Upload data' } },
-  { id: '2', type: 'custom', position: { x: 250, y: 300 }, data: { label: 'Phone Call', icon: 'phone', color: 'green', hasToggle: true, sublabel: 'AI Voice Agent' } },
+  { id: '1', type: 'custom', position: { x: 300, y: 50 }, data: { label: 'Source files', icon: 'source', color: 'blue', type: 'trigger', sublabel: '4', layout: 'vertical' } },
+  { id: '2', type: 'custom', position: { x: 300, y: 220 }, data: { label: 'Find ICP accounts', icon: 'search', hasToggle: true, toggleLabel: 'Browse internet', sublabel: '18,423 prospects', layout: 'horizontal' } },
+  
+  { id: '3', type: 'custom', position: { x: 100, y: 400 }, data: { label: 'Detect signals', icon: 'action', sublabel: 'Intent + hiring + funding', layout: 'horizontal' } },
+  { id: '4', type: 'custom', position: { x: 500, y: 400 }, data: { label: 'Analyze data', icon: 'logic', sublabel: 'Firmographic + context', layout: 'horizontal' } },
+  
+  { id: '5', type: 'custom', position: { x: 150, y: 550 }, data: { label: 'Personalize outreach', icon: 'email', sublabel: 'Email + LinkedIn', color: 'blue', layout: 'horizontal' }, selected: true },
+  { id: '6', type: 'custom', position: { x: 500, y: 550 }, data: { label: 'Score & qualify', icon: 'ai', sublabel: 'ICP fit >= 84%', layout: 'horizontal' } },
 ];
 const initialEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2', animated: true, style: { stroke: '#6366f1', strokeWidth: 2 } }
+  { id: 'e1-2', source: '1', target: '2', type: 'smoothstep', style: { stroke: 'rgba(255,255,255,0.3)', strokeWidth: 2 } },
+  { id: 'e2-3', source: '2', target: '3', type: 'smoothstep', style: { stroke: 'rgba(255,255,255,0.3)', strokeWidth: 2 } },
+  { id: 'e2-4', source: '2', target: '4', type: 'smoothstep', style: { stroke: 'rgba(255,255,255,0.3)', strokeWidth: 2 } },
+  { id: 'e3-5', source: '3', target: '5', type: 'smoothstep', style: { stroke: 'rgba(255,255,255,0.3)', strokeWidth: 2 } },
+  { id: 'e4-6', source: '4', target: '6', type: 'smoothstep', style: { stroke: 'rgba(255,255,255,0.3)', strokeWidth: 2 } },
 ];
 
-let id = 3;
+let id = 7;
 const getId = () => `${id++}`;
 
 function PipelineFlow() {
@@ -91,7 +101,7 @@ function PipelineFlow() {
   }, []);
 
   return (
-    <div className="flex h-full w-full bg-slate-950 font-sans overflow-hidden text-white relative">
+    <div className="flex h-full w-full bg-gradient-to-br from-[#536979] to-[#8C7672] font-sans overflow-hidden text-white relative">
       <SidebarLeft />
       
       <div className="flex-1 h-full relative" ref={reactFlowWrapper}>
@@ -109,8 +119,8 @@ function PipelineFlow() {
           colorMode="dark"
           fitView
         >
-          <Background color="#334155" gap={20} size={1.5} />
-          <Controls className="bg-slate-900 border-white/10 fill-white" />
+          <Background color="#ffffff" gap={24} size={2} style={{ opacity: 0.15 }} />
+          <Controls className="bg-white/10 border-white/20 fill-white rounded-xl backdrop-blur-md" />
         </ReactFlow>
 
         <DialerPanel isOpen={isDialerOpen} onClose={() => setIsDialerOpen(false)} />
@@ -126,7 +136,7 @@ function PipelineFlow() {
 
 export default function PipelinePage() {
   return (
-    <div className="h-[calc(100vh-64px)] md:h-screen w-full bg-slate-950 pt-16 md:pt-0">
+    <div className="h-[calc(100vh-64px)] md:h-screen w-full pt-16 md:pt-0">
       <ReactFlowProvider>
         <PipelineFlow />
       </ReactFlowProvider>

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { 
   FileText, Phone, MessageCircle, Bot, Mail, Users, 
-  Settings, Zap, CheckCircle2, Clock, Search 
+  Settings, Zap, CheckCircle2, Clock, Search, Lock, X, Plus, MoreHorizontal
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
@@ -23,57 +23,82 @@ export const CustomNode = memo(({ data, selected }: any) => {
 
   return (
     <div className={`
-      relative min-w-[200px] rounded-2xl border backdrop-blur-xl transition-all duration-300
+      relative min-w-[240px] rounded-2xl border backdrop-blur-2xl transition-all duration-300
       ${selected 
-        ? 'border-indigo-500 bg-slate-900/80 shadow-[0_0_20px_rgba(99,102,241,0.3)]' 
-        : 'border-white/10 bg-slate-900/40 hover:bg-slate-900/60 hover:border-white/20'
+        ? 'border-white/40 bg-white/10 shadow-[0_0_30px_rgba(255,255,255,0.15)]' 
+        : 'border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30'
       }
     `}>
+      
+      {/* Top Tab (Lock, X, +, ...) */}
+      <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1 bg-white/10 border border-white/20 backdrop-blur-xl rounded-t-xl text-white/50 opacity-0 group-hover:opacity-100 transition-opacity">
+         <Lock className="w-3 h-3 hover:text-white cursor-pointer" />
+         <X className="w-3 h-3 hover:text-white cursor-pointer" />
+         <Plus className="w-3 h-3 hover:text-white cursor-pointer" />
+         <MoreHorizontal className="w-3 h-3 hover:text-white cursor-pointer" />
+      </div>
+
       {/* Input Handle */}
       {data.type !== 'trigger' && (
         <Handle 
           type="target" 
           position={Position.Top} 
-          className="w-3 h-3 bg-indigo-400 border-2 border-slate-900"
+          className="w-3 h-3 bg-white border-2 border-slate-900 -mt-1.5"
         />
       )}
 
-      <div className="p-4 flex flex-col items-center gap-3">
-        <div className={`
-          w-12 h-12 rounded-xl flex items-center justify-center
-          ${data.color === 'blue' ? 'bg-blue-500/20 text-blue-400' : ''}
-          ${data.color === 'green' ? 'bg-green-500/20 text-green-400' : ''}
-          ${data.color === 'purple' ? 'bg-purple-500/20 text-purple-400' : ''}
-          ${data.color === 'orange' ? 'bg-orange-500/20 text-orange-400' : ''}
-          ${!data.color ? 'bg-slate-700/50 text-slate-300' : ''}
-        `}>
-          <Icon className="w-6 h-6" />
-        </div>
-        
-        <div className="text-center">
-          <h3 className="text-sm font-semibold text-slate-200">{data.label}</h3>
-          {data.sublabel && (
-            <p className="text-xs text-slate-500 mt-1">{data.sublabel}</p>
-          )}
-        </div>
-
-        {/* Toggle switch placeholder if needed */}
-        {data.hasToggle && (
-          <div className="w-full flex items-center justify-between mt-2 pt-2 border-t border-white/5">
-            <span className="text-xs text-slate-400">Enable</span>
-            <div className="w-8 h-4 bg-indigo-500 rounded-full relative">
-              <div className="absolute right-1 top-1 w-2 h-2 bg-white rounded-full"></div>
-            </div>
+      {/* Layout for nodes where Icon is on Left, Text on Right */}
+      {data.layout === 'horizontal' ? (
+        <div className="p-4 flex items-center gap-4">
+          <div className="w-10 h-10 shrink-0">
+             <Icon className={`w-full h-full ${data.iconColor || 'text-white/80'}`} strokeWidth={1.5} />
           </div>
-        )}
-      </div>
+          <div className="flex-1 text-left">
+            <h3 className="text-sm font-semibold text-white tracking-wide">{data.label}</h3>
+            {data.sublabel && (
+              <p className="text-xs text-white/50 mt-0.5">{data.sublabel}</p>
+            )}
+          </div>
+        </div>
+      ) : (
+        /* Layout for nodes where Icon is on Top, Text Below (e.g., Source files) */
+        <div className="p-5 flex flex-col items-center gap-3">
+          <div className={`
+            w-16 h-16 rounded-2xl flex items-center justify-center shrink-0
+            ${data.color === 'blue' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : ''}
+            ${data.color === 'green' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : ''}
+            ${data.color === 'purple' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' : ''}
+            ${data.color === 'orange' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : ''}
+            ${!data.color ? 'bg-white/10 text-white/70 border border-white/20' : ''}
+          `}>
+            <Icon className="w-8 h-8" strokeWidth={1.5} />
+          </div>
+          
+          <div className="text-center">
+            <h3 className="text-[15px] font-semibold text-white tracking-wide">{data.label}</h3>
+            {data.sublabel && (
+              <p className="text-xs text-white/50 mt-1">{data.sublabel}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Toggle Switch inside Node */}
+      {data.hasToggle && (
+        <div className="w-full flex items-center justify-between px-4 pb-4 border-t border-white/10 mt-2 pt-3">
+          <span className="text-xs text-white/50 font-medium">{data.toggleLabel || 'Browse internet'}</span>
+          <div className="w-8 h-4.5 bg-blue-500 rounded-full relative shadow-inner">
+            <div className="absolute right-0.5 top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow-sm"></div>
+          </div>
+        </div>
+      )}
 
       {/* Output Handle */}
       {data.type !== 'end' && (
         <Handle 
           type="source" 
           position={Position.Bottom} 
-          className="w-3 h-3 bg-indigo-400 border-2 border-slate-900"
+          className="w-3 h-3 bg-white border-2 border-slate-900 -mb-1.5"
         />
       )}
     </div>

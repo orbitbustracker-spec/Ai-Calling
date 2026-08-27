@@ -3,30 +3,33 @@
 import React from 'react';
 import { 
   FileText, Phone, MessageCircle, Bot, Mail, Users, 
-  Settings, Zap, CheckCircle2, Clock, Search 
+  Settings, Zap, Clock, Search, Link as LinkIcon 
 } from 'lucide-react';
 
 const NODE_TYPES = [
   {
-    category: 'Trigger',
+    category: 'LOGIC',
     items: [
-      { type: 'custom', data: { label: 'Source files', icon: 'source', color: 'blue', type: 'trigger', sublabel: 'Upload data' } }
+      { type: 'custom', data: { label: 'New branch', icon: 'logic', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'Delay', icon: 'delay', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'Score & qualify', icon: 'action', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'Intent', icon: 'ai', layout: 'vertical', sublabel: '' } },
     ]
   },
   {
-    category: 'Outreach & Comms',
+    category: 'PROSPECTING',
     items: [
-      { type: 'custom', data: { label: 'Phone Call', icon: 'phone', color: 'green', hasToggle: true, sublabel: 'AI Voice Agent' } },
-      { type: 'custom', data: { label: 'WhatsApp', icon: 'whatsapp', color: 'green', sublabel: 'Send Template' } },
-      { type: 'custom', data: { label: 'Send Email', icon: 'email', color: 'purple', sublabel: 'Sales Outreach' } },
+      { type: 'custom', data: { label: 'Find prospects', icon: 'search', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'Import list', icon: 'source', layout: 'vertical', sublabel: '' } },
     ]
   },
   {
-    category: 'Logic & AI',
+    category: 'OUTREACH',
     items: [
-      { type: 'custom', data: { label: 'AI Intent', icon: 'ai', color: 'orange', sublabel: 'Analyze response' } },
-      { type: 'custom', data: { label: 'Score & Quality', icon: 'action', color: 'orange', sublabel: 'Lead Scoring' } },
-      { type: 'custom', data: { label: 'Delay', icon: 'delay', color: '', sublabel: 'Wait duration' } },
+      { type: 'custom', data: { label: 'Send email', icon: 'email', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'Connect', icon: 'whatsapp', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'Enrich contacts', icon: 'prospect', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'AI signal', icon: 'action', layout: 'vertical', sublabel: '' } },
     ]
   }
 ];
@@ -39,48 +42,56 @@ export function SidebarLeft() {
   };
 
   return (
-    <div className="w-72 bg-slate-900/50 backdrop-blur-xl border-r border-white/10 p-5 flex flex-col gap-6 overflow-y-auto z-10">
-      <div>
-        <h2 className="text-lg font-bold text-white mb-1">Workflow Builder</h2>
-        <p className="text-xs text-slate-400">Drag and drop nodes to create your AI agent pipeline.</p>
+    <div className="w-80 bg-[#4F6474]/40 backdrop-blur-3xl border-r border-white/10 p-5 flex flex-col gap-6 overflow-y-auto z-10 shadow-2xl">
+      
+      {/* Top Tabs */}
+      <div className="flex items-center p-1 bg-white/10 rounded-full border border-white/5">
+        <button className="flex-1 py-2 px-4 rounded-full bg-white/20 text-white text-sm font-semibold shadow-sm transition-all text-center">
+          Workflow
+        </button>
+        <button className="flex-1 py-2 px-4 rounded-full text-white/60 hover:text-white text-sm font-semibold transition-all text-center">
+          Resources
+        </button>
       </div>
 
-      {NODE_TYPES.map((group, i) => (
-        <div key={i}>
-          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">{group.category}</h3>
-          <div className="flex flex-col gap-3">
-            {group.items.map((item, j) => (
-              <div 
-                key={j}
-                draggable
-                onDragStart={(e) => onDragStart(e, item.type, item.data)}
-                className="flex items-center gap-3 p-3 bg-slate-800/50 hover:bg-slate-700/50 border border-white/5 rounded-xl cursor-grab active:cursor-grabbing transition-colors"
-              >
-                <div className={`
-                  w-8 h-8 rounded-lg flex items-center justify-center shrink-0
-                  ${item.data.color === 'blue' ? 'bg-blue-500/20 text-blue-400' : ''}
-                  ${item.data.color === 'green' ? 'bg-green-500/20 text-green-400' : ''}
-                  ${item.data.color === 'purple' ? 'bg-purple-500/20 text-purple-400' : ''}
-                  ${item.data.color === 'orange' ? 'bg-orange-500/20 text-orange-400' : ''}
-                  ${!item.data.color ? 'bg-slate-700/50 text-slate-300' : ''}
-                `}>
-                  {item.data.icon === 'source' && <FileText className="w-4 h-4" />}
-                  {item.data.icon === 'phone' && <Phone className="w-4 h-4" />}
-                  {item.data.icon === 'whatsapp' && <MessageCircle className="w-4 h-4" />}
-                  {item.data.icon === 'email' && <Mail className="w-4 h-4" />}
-                  {item.data.icon === 'ai' && <Bot className="w-4 h-4" />}
-                  {item.data.icon === 'action' && <Zap className="w-4 h-4" />}
-                  {item.data.icon === 'delay' && <Clock className="w-4 h-4" />}
+      <div className="flex-1 flex flex-col gap-8">
+        {NODE_TYPES.map((group, i) => (
+          <div key={i}>
+            <h3 className="text-[11px] font-bold text-white/50 uppercase tracking-widest mb-4 flex items-center gap-2 cursor-pointer hover:text-white/80 transition-colors">
+              {group.category}
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {group.items.map((item, j) => (
+                <div 
+                  key={j}
+                  draggable
+                  onDragStart={(e) => onDragStart(e, item.type, item.data)}
+                  className="flex flex-col items-center justify-center p-4 h-28 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl cursor-grab active:cursor-grabbing transition-all shadow-sm hover:shadow-md group"
+                >
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-2 text-white/70 group-hover:text-white group-hover:scale-110 transition-all">
+                    {item.data.icon === 'source' && <FileText className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'phone' && <Phone className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'whatsapp' && <LinkIcon className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'email' && <Mail className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'ai' && <Bot className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'action' && <Zap className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'delay' && <Clock className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'search' && <Search className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'logic' && <Settings className="w-6 h-6" strokeWidth={1.5} />}
+                    {item.data.icon === 'prospect' && <Users className="w-6 h-6" strokeWidth={1.5} />}
+                  </div>
+                  <div className="text-xs font-medium text-white/80 group-hover:text-white text-center leading-tight">
+                    {item.data.label}
+                  </div>
                 </div>
-                <div>
-                  <div className="text-sm font-medium text-slate-200">{item.data.label}</div>
-                  <div className="text-xs text-slate-500">{item.data.sublabel}</div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
