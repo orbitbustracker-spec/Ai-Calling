@@ -177,7 +177,7 @@ export default function AdminCapabilitiesView({ organizations }: { organizations
 
                   <button 
                     onClick={handleConnect}
-                    className="w-full mt-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
+                    className="w-full mt-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-slate-900 dark:text-white font-medium rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
                   >
                     <LinkIcon className="h-4 w-4" /> Connect {SOCIAL_PLATFORMS[selectedPlatform].name}
                   </button>
@@ -242,7 +242,7 @@ export default function AdminCapabilitiesView({ organizations }: { organizations
               <button onClick={() => setModalOpen(false)} className="px-5 py-2.5 font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-xl transition-colors">
                 Cancel
               </button>
-              <button onClick={() => { alert('Configurations Saved Successfully'); setModalOpen(false); }} className="px-5 py-2.5 bg-indigo-600 text-white font-medium hover:bg-indigo-700 rounded-xl shadow-sm transition-colors flex items-center gap-2">
+              <button onClick={() => { alert('Configurations Saved Successfully'); setModalOpen(false); }} className="px-5 py-2.5 bg-indigo-600 text-slate-900 dark:text-white font-medium hover:bg-indigo-700 rounded-xl shadow-sm transition-colors flex items-center gap-2">
                 <Save className="h-4 w-4" /> Save All Changes
               </button>
             </div>

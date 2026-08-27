@@ -15,19 +15,19 @@ export default async function CallSummaryPage() {
   });
 
   return (
-    <div className="p-8 space-y-8 text-slate-300">
+    <div className="p-8 space-y-8 text-slate-700 dark:text-slate-300">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-black text-white flex items-center gap-2">
-            <FileText className="w-8 h-8 text-indigo-400" /> AI Call Summary & Transcripts
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <FileText className="w-8 h-8 text-indigo-600 dark:text-indigo-400" /> AI Call Summary & Transcripts
           </h1>
-          <p className="text-slate-400 mt-1">Detailed text reports and summaries of all AI conversations with caller IDs.</p>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Detailed text reports and summaries of all AI conversations with caller IDs.</p>
         </div>
       </div>
 
-      <div className="bg-slate-900/50 border border-white/10 rounded-2xl overflow-hidden flex flex-col">
-        <table className="w-full text-left text-sm text-slate-300">
-          <thead className="bg-slate-950/50 border-b border-white/10 uppercase text-[10px] font-bold text-slate-500 tracking-wider">
+      <div className="bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden flex flex-col">
+        <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300">
+          <thead className="bg-slate-950/50 border-b border-slate-200 dark:border-white/10 uppercase text-[10px] font-bold text-slate-500 tracking-wider">
             <tr>
               <th className="p-5">Caller ID</th>
               <th className="p-5">Organization</th>
@@ -47,7 +47,7 @@ export default async function CallSummaryPage() {
                 </td>
                 <td className="p-5">{call.organization?.name || '-'}</td>
                 <td className="p-5">
-                  <div className="flex items-center gap-1.5 text-slate-400">
+                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
                     <Calendar className="w-3.5 h-3.5" /> 
                     {new Date(call.createdAt).toLocaleDateString()}
                   </div>
@@ -69,14 +69,14 @@ export default async function CallSummaryPage() {
                 <td className="p-5 max-w-md">
                   {call.summaryText && (
                     <div className="mb-2">
-                      <span className="text-xs font-bold text-indigo-400 uppercase">Summary</span>
-                      <p className="text-sm text-slate-300 mt-1">{call.summaryText}</p>
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase">Summary</span>
+                      <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">{call.summaryText}</p>
                     </div>
                   )}
                   {call.transcriptText && (
-                    <div className="mt-2 p-3 bg-slate-950 rounded-lg border border-white/5 h-24 overflow-y-auto custom-scrollbar">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase sticky top-0 bg-slate-950 pb-1 block">Full Transcript</span>
-                      <p className="text-xs text-slate-400 whitespace-pre-wrap mt-1">{call.transcriptText}</p>
+                    <div className="mt-2 p-3 bg-gray-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-white/5 h-24 overflow-y-auto custom-scrollbar">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase sticky top-0 bg-gray-50 dark:bg-slate-950 pb-1 block">Full Transcript</span>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 whitespace-pre-wrap mt-1">{call.transcriptText}</p>
                     </div>
                   )}
                   {!call.summaryText && !call.transcriptText && (

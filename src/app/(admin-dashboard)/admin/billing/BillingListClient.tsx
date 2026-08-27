@@ -170,7 +170,7 @@ function BillingDetailPanel({ org }: { org: any }) {
           <Button 
             type="submit" 
             disabled={loading || !addMinutes}
-            className="w-full bg-indigo-600 text-white font-bold hover:bg-indigo-700"
+            className="w-full bg-indigo-600 text-slate-900 dark:text-white font-bold hover:bg-indigo-700"
           >
             {loading ? 'Adding...' : 'Confirm & Add Balance'}
           </Button>

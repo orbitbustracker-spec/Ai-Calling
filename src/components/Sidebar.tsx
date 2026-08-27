@@ -12,6 +12,7 @@ import {
 
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import { UserProfileModal } from '@/components/profile/UserProfileModal';
 
 export const Sidebar = ({ role }: { role?: string }) => {
   const pathname = usePathname();
@@ -69,6 +70,7 @@ export const Sidebar = ({ role }: { role?: string }) => {
     {
       title: 'SYSTEM CONFIG',
       items: [
+        { href: '/admin/analytics/usage', label: 'Dashboard', icon: Activity },
         { href: '/admin/telephony', label: 'Telephony & SIP', icon: Settings2 },
         { href: '/admin/ai-engines', label: 'AI Engines', icon: Cpu },
         { href: '/admin/organizations', label: 'Organizations', icon: Building2 },
@@ -81,7 +83,6 @@ export const Sidebar = ({ role }: { role?: string }) => {
       items: [
         { href: '/admin/knowledge-base', label: 'Global Knowledge Base', icon: BookOpen },
         { href: '/admin/services-master', label: 'Services Master Center', icon: MessageSquare },
-        { href: '/admin/analytics/usage', label: 'Dashboard', icon: Activity },
         { href: '/admin/call-summary', label: 'Call Summary', icon: FileText },
         { href: '/admin/audit-logs', label: 'System Logs', icon: Activity },
       ]
@@ -91,6 +92,7 @@ export const Sidebar = ({ role }: { role?: string }) => {
   const sections = isSuperAdmin ? superAdminSections : standardSections;
 
   const [isOpenMobile, setIsOpenMobile] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Close sidebar on navigation
   useEffect(() => {
@@ -114,6 +116,14 @@ export const Sidebar = ({ role }: { role?: string }) => {
         <div 
           className="md:hidden fixed inset-0 bg-black/60 z-40"
           onClick={() => setIsOpenMobile(false)}
+        />
+      )}
+
+      {/* Profile Modal */}
+      {isProfileOpen && (
+        <UserProfileModal 
+          isOpen={isProfileOpen} 
+          onClose={() => setIsProfileOpen(false)} 
         />
       )}
 
@@ -168,13 +178,13 @@ export const Sidebar = ({ role }: { role?: string }) => {
         {/* Profile & Logout Footer */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-900 mt-auto">
           <div className="space-y-1">
-            <Link
-              href="/update-password"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900/50"
+            <button
+              onClick={() => setIsProfileOpen(true)}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900/50"
             >
               <UserCircle className="h-5 w-5 text-gray-500 dark:text-gray-500" />
               <span className="text-sm">My Profile</span>
-            </Link>
+            </button>
             <button
               onClick={async () => {
                 const supabase = createClient();

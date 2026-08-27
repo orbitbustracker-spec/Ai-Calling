@@ -30,7 +30,7 @@ export default function BillingConfigClient({ initialConfig }: { initialConfig: 
       </div>
       <p className="text-sm text-gray-500">Note: Changing this does not affect historical package purchases.</p>
       {msg && <div className="text-blue-600">{msg}</div>}
-      <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded">Save Configuration</button>
+      <button onClick={handleSave} className="bg-blue-600 text-slate-900 dark:text-white px-4 py-2 rounded">Save Configuration</button>
     </div>
   );
 }

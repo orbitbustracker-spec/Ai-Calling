@@ -46,7 +46,7 @@ export default function AssignPackageClient({ organizations, packages }: { organ
         </div>
       )}
       {msg && <div className="text-blue-600">{msg}</div>}
-      <button onClick={handleAssign} className="bg-blue-600 text-white px-4 py-2 rounded">Confirm Assignment</button>
+      <button onClick={handleAssign} className="bg-blue-600 text-slate-900 dark:text-white px-4 py-2 rounded">Confirm Assignment</button>
     </div>
   );
 }

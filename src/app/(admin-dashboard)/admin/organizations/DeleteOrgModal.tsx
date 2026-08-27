@@ -88,7 +88,7 @@ export default function DeleteOrgModal({ orgId, orgName }: { orgId: string, orgN
                 <Button 
                   onClick={handleDelete} 
                   disabled={confirmName !== orgName || !reason || loading}
-                  className="bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 flex items-center"
+                  className="bg-red-600 text-slate-900 dark:text-white hover:bg-red-700 disabled:opacity-50 flex items-center"
                 >
                   {loading ? 'Deleting...' : <><Trash2 className="h-4 w-4 mr-2" /> Delete Project</>}
                 </Button>

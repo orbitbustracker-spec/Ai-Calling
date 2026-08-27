@@ -162,7 +162,7 @@ export default function MonitoringDashboardClient({
                   <div className="flex justify-between mb-2">
                     <span className="font-bold">{camp.name} <span className="text-sm font-normal text-gray-500">({camp.organization.name})</span></span>
                     <span className={
-                      "px-2 py-1 text-xs rounded text-white " + (camp.status === 'RUNNING' ? 'bg-green-500' : 'bg-gray-500')
+                      "px-2 py-1 text-xs rounded text-slate-900 dark:text-white " + (camp.status === 'RUNNING' ? 'bg-green-500' : 'bg-gray-500')
                     }>{camp.status}</span>
                   </div>
                   <div className="text-sm text-gray-600 mb-2">Type: {camp.type}</div>
@@ -201,7 +201,7 @@ export default function MonitoringDashboardClient({
                     <td className="p-2 font-mono text-sm">{wh.eventType}</td>
                     <td className="p-2">
                       <span className={
-                        "px-2 py-1 text-xs rounded text-white " + (wh.status === 'SUCCESS' ? 'bg-green-500' : wh.status === 'FAILED' ? 'bg-red-500' : 'bg-yellow-500')
+                        "px-2 py-1 text-xs rounded text-slate-900 dark:text-white " + (wh.status === 'SUCCESS' ? 'bg-green-500' : wh.status === 'FAILED' ? 'bg-red-500' : 'bg-yellow-500')
                       }>
                         {wh.status}
                       </span>

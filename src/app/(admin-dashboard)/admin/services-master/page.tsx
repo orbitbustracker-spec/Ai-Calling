@@ -23,30 +23,30 @@ export default function ServicesMasterPage() {
     <div className="h-full">
       <div className="flex justify-between items-end mb-8">
         <div>
-          <h1 className="text-3xl font-black text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2 flex items-center gap-3">
             <Shield className="w-8 h-8 text-rose-500" /> Super Admin Overrides
           </h1>
-          <p className="text-slate-400">Master governance matrix for all organizations.</p>
+          <p className="text-slate-500 dark:text-slate-400">Master governance matrix for all organizations.</p>
         </div>
       </div>
 
-      <div className="bg-slate-900/50 border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative">
+      <div className="bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl relative">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-rose-500/10 blur-[100px] rounded-full pointer-events-none" />
 
-        <div className="p-4 border-b border-white/10 flex justify-between items-center bg-slate-900/80 backdrop-blur-md relative z-10">
+        <div className="p-4 border-b border-slate-200 dark:border-white/10 flex justify-between items-center bg-slate-900/80 backdrop-blur-md relative z-10">
           <div className="relative w-64">
             <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
             <input 
               type="text" 
               placeholder="Search organizations..." 
-              className="w-full bg-slate-950 border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white focus:border-rose-500 outline-none"
+              className="w-full bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-900 dark:text-white focus:border-rose-500 outline-none"
             />
           </div>
         </div>
 
         <div className="overflow-x-auto relative z-10">
-          <table className="w-full text-left text-sm text-slate-300">
-            <thead className="text-[10px] uppercase bg-slate-950/50 text-slate-400 border-b border-white/10">
+          <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300">
+            <thead className="text-[10px] uppercase bg-slate-950/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-white/10">
               <tr>
                 <th className="px-6 py-4 font-bold tracking-wider">Organization</th>
                 <th className="px-6 py-4 font-bold tracking-wider text-right">Balance</th>
@@ -59,9 +59,9 @@ export default function ServicesMasterPage() {
             </thead>
             <tbody className="divide-y divide-white/5 bg-slate-900/30">
               {orgs.map((org) => (
-                <tr key={org.id} className={`hover:bg-slate-800/50 transition-colors ${org.frozen ? 'bg-rose-500/5' : ''}`}>
+                <tr key={org.id} className={`hover:bg-white dark:bg-slate-800/50 transition-colors ${org.frozen ? 'bg-rose-500/5' : ''}`}>
                   <td className="px-6 py-4">
-                    <div className="font-bold text-white">{org.name}</div>
+                    <div className="font-bold text-slate-900 dark:text-white">{org.name}</div>
                     <div className="text-xs text-slate-500">ORG-{org.id.padStart(4, '0')}</div>
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -93,8 +93,8 @@ export default function ServicesMasterPage() {
                       onClick={() => toggleFreeze(org.id)}
                       className={`px-4 py-2 rounded-lg font-bold text-xs transition-colors ${
                         org.frozen 
-                        ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
-                        : 'bg-rose-600 hover:bg-rose-500 text-white shadow-[0_0_10px_rgba(225,29,72,0.3)]'
+                        ? 'bg-emerald-600 hover:bg-emerald-500 text-slate-900 dark:text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
+                        : 'bg-rose-600 hover:bg-rose-500 text-slate-900 dark:text-white shadow-[0_0_10px_rgba(225,29,72,0.3)]'
                       }`}
                     >
                       {org.frozen ? 'Unfreeze Org' : 'Force Freeze'}

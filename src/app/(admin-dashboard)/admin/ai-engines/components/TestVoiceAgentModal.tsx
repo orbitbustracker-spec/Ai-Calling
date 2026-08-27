@@ -148,22 +148,22 @@ export default function TestVoiceAgentModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+      <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/50 dark:bg-slate-950/80 backdrop-blur-sm">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-slate-900 text-white rounded-xl w-full max-w-2xl border border-indigo-500/30 shadow-2xl overflow-hidden relative flex flex-col max-h-[90vh]"
+          className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl w-full max-w-2xl border border-indigo-500/30 shadow-2xl overflow-hidden relative flex flex-col max-h-[90vh]"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-800 p-6 bg-slate-900/50">
             <h2 className="text-xl font-bold flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-                 <PhoneCall className="w-5 h-5 text-indigo-400" />
+              <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-500/20 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                 <PhoneCall className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               </div>
               Voice Agent Call Simulator
             </h2>
-            <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
+            <button onClick={onClose} className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors">
               <X className="w-6 h-6" />
             </button>
           </div>
@@ -174,7 +174,7 @@ export default function TestVoiceAgentModal({
             {/* Configuration */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-slate-950/50 p-4 rounded-lg border border-slate-800">
-                <label className="block text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-2">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase flex items-center gap-2">
                   <Building2 className="w-4 h-4" /> 1. Select Organization (RAG)
                 </label>
                 <select 
@@ -193,7 +193,7 @@ export default function TestVoiceAgentModal({
                       setGreeting('नमस्ते! म एआई भर्चुअल सहायक हुँ। म तपाईंलाई कसरी सहयोग गर्न सक्छु?');
                     }
                   }}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 >
                   <option value="">-- Generic Assistant --</option>
                   {organizations?.map(org => (
@@ -203,14 +203,14 @@ export default function TestVoiceAgentModal({
               </div>
 
               <div className="bg-slate-950/50 p-4 rounded-lg border border-slate-800">
-                <label className="block text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-2">
+                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase flex items-center gap-2">
                   <MessageSquare className="w-4 h-4" /> 2. Welcome Greeting
                 </label>
                 <input 
                   type="text"
                   value={greeting}
                   onChange={(e) => setGreeting(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   placeholder="नमस्ते..."
                 />
               </div>
@@ -221,7 +221,7 @@ export default function TestVoiceAgentModal({
               <div className="flex justify-center">
                 <button 
                   onClick={startSimulatedCall}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_15px_rgba(5,150,105,0.4)] flex items-center gap-2 transition-all transform hover:scale-105"
+                  className="bg-emerald-600 hover:bg-emerald-500 text-slate-900 dark:text-white font-bold py-3 px-8 rounded-full shadow-[0_0_15px_rgba(5,150,105,0.4)] flex items-center gap-2 transition-all transform hover:scale-105"
                 >
                   <Play className="w-5 h-5 fill-current" /> Simulate Call Connection
                 </button>
@@ -230,7 +230,7 @@ export default function TestVoiceAgentModal({
 
             {/* Chat History */}
             {chatHistory.length > 0 && (
-              <div className="flex-1 bg-slate-950 rounded-lg border border-slate-800 p-4 overflow-y-auto min-h-[200px] flex flex-col gap-4">
+              <div className="flex-1 bg-gray-50 dark:bg-slate-950 rounded-lg border border-slate-800 p-4 overflow-y-auto min-h-[200px] flex flex-col gap-4">
                 {chatHistory.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'agent' ? 'justify-start' : 'justify-end'}`}>
                     <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.role === 'agent' ? 'bg-indigo-900/50 text-indigo-100 rounded-tl-none border border-indigo-500/20' : 'bg-emerald-900/50 text-emerald-100 rounded-tr-none border border-emerald-500/20'}`}>
@@ -243,7 +243,7 @@ export default function TestVoiceAgentModal({
             )}
 
             <div className="flex items-center justify-between border-t border-slate-800 pt-4">
-               <div className="text-sm text-slate-400">Status:</div>
+               <div className="text-sm text-slate-500 dark:text-slate-400">Status:</div>
                <span className={`text-xs px-3 py-1 rounded-full border font-mono font-medium shadow-sm transition-colors ${status.includes('Error') ? 'bg-red-900/30 text-red-400 border-red-700/50' : 'bg-emerald-900/30 text-emerald-400 border-emerald-700/50'}`}>
                  {status}
                </span>
@@ -255,14 +255,14 @@ export default function TestVoiceAgentModal({
                 {!isRecording ? (
                   <button
                     onClick={startRecording}
-                    className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-8 py-4 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] transform hover:-translate-y-0.5"
+                    className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-slate-900 dark:text-white px-8 py-4 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] transform hover:-translate-y-0.5"
                   >
                     <Mic className="w-5 h-5" /> Reply to Agent
                   </button>
                 ) : (
                   <button
                     onClick={stopRecording}
-                    className="flex items-center gap-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white px-8 py-4 rounded-full font-bold transition-all animate-pulse shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+                    className="flex items-center gap-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-slate-900 dark:text-white px-8 py-4 rounded-full font-bold transition-all animate-pulse shadow-[0_0_20px_rgba(220,38,38,0.4)]"
                   >
                     <Square className="w-5 h-5 fill-current" /> Stop & Send
                   </button>

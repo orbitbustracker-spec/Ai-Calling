@@ -34,7 +34,7 @@ export default function AdjustBalanceClient({ orgId }: { orgId: string }) {
         <input type="text" value={reason} onChange={e => setReason(e.target.value)} className="w-full border p-2 rounded" />
       </div>
       {msg && <div className="text-sm text-blue-600">{msg}</div>}
-      <button onClick={handleAdjust} className="bg-blue-600 text-white px-4 py-2 rounded">Confirm Adjustment</button>
+      <button onClick={handleAdjust} className="bg-blue-600 text-slate-900 dark:text-white px-4 py-2 rounded">Confirm Adjustment</button>
     </div>
   );
 }

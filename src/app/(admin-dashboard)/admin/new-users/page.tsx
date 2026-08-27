@@ -95,7 +95,7 @@ export default function NewUsersPage() {
                 <Button onClick={() => alert("Request Rejected")} className="bg-red-50 hover:bg-red-100 text-red-600 font-medium border border-red-200 px-6 py-2">
                   <XCircle className="h-4 w-4 mr-2" /> Reject
                 </Button>
-                <Button onClick={() => handleApprove(user.id)} className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 shadow">
+                <Button onClick={() => handleApprove(user.id)} className="bg-indigo-600 hover:bg-indigo-700 text-slate-900 dark:text-white font-medium px-6 py-2 shadow">
                   <CheckCircle2 className="h-4 w-4 mr-2" /> Approve & Notify
                 </Button>
               </div>
