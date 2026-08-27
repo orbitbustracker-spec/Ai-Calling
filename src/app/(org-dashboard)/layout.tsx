@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 import { DualSidebar } from "@/components/layout/DualSidebar";
 import { HeaderCreditBar } from "@/components/layout/HeaderCreditBar";
+import { GlobalFloatingDialer } from "@/components/global/GlobalFloatingDialer";
 
 export default async function OrgDashboardLayout({ children }: { children: ReactNode }) {
   try {
@@ -26,6 +27,8 @@ export default async function OrgDashboardLayout({ children }: { children: React
           </div>
         </main>
         
+        <GlobalFloatingDialer />
+
         {/* Subtle Background Elements */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
