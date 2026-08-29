@@ -25,7 +25,7 @@ export default async function OrgBillingPage() {
     // Wrap DB calls in try/catch to prevent 500 errors if tables are empty/missing
     let balance = null;
     let activeAssignment = null;
-    let recentTransactions = [];
+    let recentTransactions: any[] = [];
 
     try {
       balance = await prisma.organizationBalance.findUnique({
