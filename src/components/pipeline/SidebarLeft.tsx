@@ -8,12 +8,25 @@ import {
 
 const NODE_TYPES = [
   {
+    category: 'TRIGGER',
+    items: [
+      { type: 'custom', data: { label: 'Condition (If/Else)', icon: 'logic', layout: 'vertical', sublabel: '' } },
+    ]
+  },
+  {
     category: 'LOGIC',
     items: [
       { type: 'custom', data: { label: 'New branch', icon: 'logic', layout: 'vertical', sublabel: '' } },
       { type: 'custom', data: { label: 'Delay', icon: 'delay', layout: 'vertical', sublabel: '' } },
       { type: 'custom', data: { label: 'Score & qualify', icon: 'action', layout: 'vertical', sublabel: '' } },
       { type: 'custom', data: { label: 'Intent', icon: 'ai', layout: 'vertical', sublabel: '' } },
+    ]
+  },
+  {
+    category: 'ACTION',
+    items: [
+      { type: 'custom', data: { label: 'Make AI Call', icon: 'phone', layout: 'vertical', sublabel: '' } },
+      { type: 'custom', data: { label: 'Update CRM / Webhook', icon: 'action', layout: 'vertical', sublabel: '' } },
     ]
   },
   {

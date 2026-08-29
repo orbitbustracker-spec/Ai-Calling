@@ -18,17 +18,22 @@ export default function CustomerCRM() {
   const [members, setMembers] = useState<any[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [reminders, setReminders] = useState<any[]>([]);
+  const [stayInTouch, setStayInTouch] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Forms
   const [newContact, setNewContact] = useState({ name: '', email: '', phone: '' });
   const [newTicket, setNewTicket] = useState({ title: '', description: '' });
   const [newTransaction, setNewTransaction] = useState({ amount: '', description: '' });
+  const [newReminder, setNewReminder] = useState({ title: '', description: '', dueDate: '' });
+  const [newStayInTouch, setNewStayInTouch] = useState({ title: '', description: '', dueDate: '' });
 
-  const fetchData = async (endpoint: string, setter: any) => {
+  const fetchData = async (endpoint: string, setter: any, type?: string) => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/crm/${endpoint}`);
+      const url = type ? `/api/crm/${endpoint}?type=${type}` : `/api/crm/${endpoint}`;
+      const res = await fetch(url);
       const data = await res.json();
       if (data[endpoint]) setter(data[endpoint]);
     } catch (e) {
@@ -47,6 +52,10 @@ export default function CustomerCRM() {
       fetchData('tickets', setTickets);
     } else if (view === 'transactions') {
       fetchData('transactions', setTransactions);
+    } else if (view === 'reminder') {
+      fetchData('reminders', setReminders, 'REMINDER');
+    } else if (view === 'stay-in-touch') {
+      fetchData('reminders', setStayInTouch, 'STAY_IN_TOUCH');
     }
   }, [view, activeTab]);
 
@@ -79,6 +88,32 @@ export default function CustomerCRM() {
     try {
       const res = await fetch('/api/crm/transactions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount: parseFloat(newTransaction.amount), description: newTransaction.description }) });
       if (res.ok) { setNewTransaction({ amount: '', description: '' }); fetchData('transactions', setTransactions); }
+    } catch (e) { console.error(e); }
+  };
+
+  const handleSaveReminder = async () => {
+    if (!newReminder.title || !newReminder.dueDate) return;
+    try {
+      const res = await fetch('/api/crm/reminders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...newReminder, type: 'REMINDER' }) });
+      if (res.ok) { setNewReminder({ title: '', description: '', dueDate: '' }); fetchData('reminders', setReminders, 'REMINDER'); }
+    } catch (e) { console.error(e); }
+  };
+
+  const handleSaveStayInTouch = async () => {
+    if (!newStayInTouch.title || !newStayInTouch.dueDate) return;
+    try {
+      const res = await fetch('/api/crm/reminders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...newStayInTouch, type: 'STAY_IN_TOUCH' }) });
+      if (res.ok) { setNewStayInTouch({ title: '', description: '', dueDate: '' }); fetchData('reminders', setStayInTouch, 'STAY_IN_TOUCH'); }
+    } catch (e) { console.error(e); }
+  };
+
+  const markReminderComplete = async (id: string, type: 'REMINDER' | 'STAY_IN_TOUCH') => {
+    try {
+      const res = await fetch('/api/crm/reminders', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status: 'COMPLETED' }) });
+      if (res.ok) { 
+        if (type === 'REMINDER') fetchData('reminders', setReminders, 'REMINDER');
+        else fetchData('reminders', setStayInTouch, 'STAY_IN_TOUCH');
+      }
     } catch (e) { console.error(e); }
   };
 
@@ -268,12 +303,79 @@ export default function CustomerCRM() {
           </div>
         )}
 
-        {/* Other views placeholder */}
-        {['reminder', 'stay-in-touch'].includes(view) && (
-          <div className="max-w-4xl mx-auto flex items-center justify-center h-64 border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 font-bold">
-            {view.replace('-', ' ')} coming soon...
+        {view === 'reminder' && (
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-4">
+               <h3 className="font-bold text-slate-800">Set a Reminder</h3>
+               <input type="text" placeholder="Reminder Title" value={newReminder.title} onChange={e=>setNewReminder({...newReminder, title: e.target.value})} className="border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500" />
+               <textarea placeholder="Description" value={newReminder.description} onChange={e=>setNewReminder({...newReminder, description: e.target.value})} className="border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500" />
+               <input type="date" value={newReminder.dueDate} onChange={e=>setNewReminder({...newReminder, dueDate: e.target.value})} className="border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500" />
+               <button onClick={handleSaveReminder} className="bg-indigo-600 text-white p-3 rounded-lg font-bold">Save Reminder</button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+               <h3 className="font-bold text-slate-800 mb-4">Upcoming Reminders</h3>
+               {loading ? <div className="text-sm text-slate-500">Loading...</div> : 
+                reminders.length === 0 ? <div className="text-sm text-slate-500">No upcoming reminders.</div> :
+                reminders.map((r: any) => (
+                  <div key={r.id} className={`p-4 border rounded-xl mb-3 ${r.status === 'COMPLETED' ? 'border-emerald-200 bg-emerald-50' : 'border-slate-100'}`}>
+                    <div className="flex justify-between items-start mb-2">
+                      <div className={`font-bold ${r.status === 'COMPLETED' ? 'text-emerald-800 line-through' : 'text-slate-800'}`}>{r.title}</div>
+                      <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" /> {new Date(r.dueDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className={`text-sm mb-3 ${r.status === 'COMPLETED' ? 'text-emerald-600 line-through' : 'text-slate-600'}`}>{r.description}</p>
+                    {r.status !== 'COMPLETED' && (
+                      <button onClick={() => markReminderComplete(r.id, 'REMINDER')} className="text-xs bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 text-slate-600 font-bold py-1.5 px-3 rounded transition-colors">
+                        Mark as Complete
+                      </button>
+                    )}
+                  </div>
+                ))}
+            </div>
           </div>
         )}
+
+        {view === 'stay-in-touch' && (
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-4">
+               <h3 className="font-bold text-slate-800">Schedule Follow-Up</h3>
+               <input type="text" placeholder="Contact Name / Organization" value={newStayInTouch.title} onChange={e=>setNewStayInTouch({...newStayInTouch, title: e.target.value})} className="border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500" />
+               <textarea placeholder="Reason for follow-up" value={newStayInTouch.description} onChange={e=>setNewStayInTouch({...newStayInTouch, description: e.target.value})} className="border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500" />
+               <input type="date" value={newStayInTouch.dueDate} onChange={e=>setNewStayInTouch({...newStayInTouch, dueDate: e.target.value})} className="border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500" />
+               <button onClick={handleSaveStayInTouch} className="bg-indigo-600 text-white p-3 rounded-lg font-bold">Schedule Follow-Up</button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+               <h3 className="font-bold text-slate-800 mb-4">Stay In-Touch Schedule</h3>
+               {loading ? <div className="text-sm text-slate-500">Loading...</div> : 
+                stayInTouch.length === 0 ? <div className="text-sm text-slate-500">No follow-ups scheduled.</div> :
+                stayInTouch.map((r: any) => (
+                  <div key={r.id} className={`p-4 border rounded-xl mb-3 flex items-start gap-4 ${r.status === 'COMPLETED' ? 'border-emerald-200 bg-emerald-50' : 'border-indigo-100 bg-indigo-50/30'}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${r.status === 'COMPLETED' ? 'bg-emerald-100 text-emerald-600' : 'bg-indigo-100 text-indigo-600'}`}>
+                      <User className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start mb-1">
+                        <div className={`font-bold ${r.status === 'COMPLETED' ? 'text-emerald-800' : 'text-slate-800'}`}>{r.title}</div>
+                        <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> {new Date(r.dueDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className={`text-sm mb-3 ${r.status === 'COMPLETED' ? 'text-emerald-600' : 'text-slate-600'}`}>{r.description}</p>
+                      {r.status !== 'COMPLETED' && (
+                        <button onClick={() => markReminderComplete(r.id, 'STAY_IN_TOUCH')} className="text-xs bg-indigo-100 hover:bg-emerald-100 hover:text-emerald-700 text-indigo-700 font-bold py-1.5 px-3 rounded transition-colors flex items-center gap-1">
+                          <CheckCircle2 className="w-4 h-4" /> Done
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

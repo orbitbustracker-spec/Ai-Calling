@@ -67,6 +67,7 @@ model Organization {
   CrmTransaction        CrmTransaction[]
   AiNodes               OrganizationAiNode[]
   SipTrunks             OrganizationSipTrunk[]
+  CrmReminder           CrmReminder[]
 }
 
 model User {
@@ -619,6 +620,21 @@ model OrganizationSipTrunk {
   didsJson          Json?
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
+
+  @@index([organizationId])
+}
+
+model CrmReminder {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String
+  title          String
+  description    String?
+  dueDate        DateTime
+  status         String       @default("PENDING")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@index([organizationId])
 }

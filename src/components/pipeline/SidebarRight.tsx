@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Settings, Phone, MessageCircle } from 'lucide-react';
+import { Settings, Phone, MessageCircle, Clock, Zap, Mail } from 'lucide-react';
 import { Button } from '@/components/Button';
 
 export function SidebarRight({ selectedNode, onCallClick }: { selectedNode: any, onCallClick: () => void }) {
@@ -51,23 +51,40 @@ export function SidebarRight({ selectedNode, onCallClick }: { selectedNode: any,
         </div>
 
         {/* Conditional Properties based on Node Type */}
-        {data.icon === 'phone' && (
+        
+        {data.label === 'Make AI Call' && (
           <div className="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl space-y-4">
             <h3 className="text-sm font-medium text-indigo-400 flex items-center gap-2">
-              <Phone className="w-4 h-4" /> AI Voice Caller
+              <Phone className="w-4 h-4" /> Telephony / AI Call Config
             </h3>
-            <p className="text-xs text-slate-300">This node will initiate an outbound AI phone call to the prospect.</p>
+            <p className="text-xs text-slate-300">Start an automated AI voice call via Asterisk v20 server.</p>
             
             <div className="space-y-2">
-              <label className="text-xs text-slate-400">Select AI Agent</label>
+              <label className="text-xs text-slate-400">Telephony Server Profile</label>
+              <select className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                <option>Asterisk v20 (Primary Node)</option>
+                <option>Twilio Elastic SIP Trunk</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">AI Agent Profile</label>
               <select className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none">
                 <option>Sales Representative (Sarah)</option>
                 <option>Customer Support (John)</option>
               </select>
             </div>
 
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">Initial Call Script</label>
+              <textarea 
+                placeholder="Hi, this is Sarah from [Company]. I noticed you requested..."
+                className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none min-h-[80px]"
+              />
+            </div>
+
             <Button onClick={onCallClick} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center gap-2">
-              <Phone className="w-4 h-4" /> Open Dialer
+              <Phone className="w-4 h-4" /> Open Dialer Test
             </Button>
           </div>
         )}
@@ -86,6 +103,117 @@ export function SidebarRight({ selectedNode, onCallClick }: { selectedNode: any,
                 <option>Follow Up</option>
                 <option>Meeting Reminder</option>
               </select>
+            </div>
+          </div>
+        )}
+
+        {data.label === 'Delay' && (
+          <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-xl space-y-4">
+            <h3 className="text-sm font-medium text-orange-400 flex items-center gap-2">
+              <Clock className="w-4 h-4" /> Wait / Delay
+            </h3>
+            <p className="text-xs text-slate-300">Pause the workflow execution before continuing.</p>
+            
+            <div className="flex gap-2">
+              <div className="space-y-2 flex-1">
+                <label className="text-xs text-slate-400">Duration</label>
+                <input type="number" defaultValue={2} className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none" />
+              </div>
+              <div className="space-y-2 flex-1">
+                <label className="text-xs text-slate-400">Unit</label>
+                <select className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                  <option>Minutes</option>
+                  <option>Hours</option>
+                  <option selected>Days</option>
+                  <option>Weeks</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {data.label === 'Condition (If/Else)' && (
+          <div className="p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl space-y-4">
+            <h3 className="text-sm font-medium text-purple-400 flex items-center gap-2">
+              <Settings className="w-4 h-4" /> Logic Condition
+            </h3>
+            <p className="text-xs text-slate-300">Evaluate a rule to split the workflow into Yes/No paths.</p>
+            
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">If</label>
+              <select className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none mb-2">
+                <option>Call Status</option>
+                <option>Lead Score</option>
+                <option>Email Opened</option>
+                <option>Custom Variable</option>
+              </select>
+              
+              <div className="flex gap-2">
+                <select className="flex-1 bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                  <option>Equals</option>
+                  <option>Contains</option>
+                  <option>Greater than</option>
+                </select>
+                <input type="text" defaultValue="Answered" className="flex-1 bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {data.label === 'Update CRM / Webhook' && (
+          <div className="p-4 bg-sky-500/10 border border-sky-500/20 rounded-xl space-y-4">
+            <h3 className="text-sm font-medium text-sky-400 flex items-center gap-2">
+              <Zap className="w-4 h-4" /> External Action
+            </h3>
+            <p className="text-xs text-slate-300">Sync data back to your Database or CRM.</p>
+            
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">Connection</label>
+              <select className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                <option>Internal PostgreSQL</option>
+                <option>HubSpot CRM</option>
+                <option>Zoho CRM</option>
+                <option>Custom Webhook</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">Action to Perform</label>
+              <select className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                <option>Update Lead Status</option>
+                <option>Add Note</option>
+                <option>Create Ticket</option>
+              </select>
+            </div>
+          </div>
+        )}
+
+        {data.label === 'Send email' && (
+          <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl space-y-4">
+            <h3 className="text-sm font-medium text-rose-400 flex items-center gap-2">
+              <Mail className="w-4 h-4" /> Email Outreach
+            </h3>
+            
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">Provider</label>
+              <select className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                <option>SendGrid</option>
+                <option>Resend</option>
+                <option>SMTP Custom</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">Subject Line</label>
+              <input type="text" placeholder="Following up on our call..." className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none" />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs text-slate-400">Email Body</label>
+              <textarea 
+                placeholder="Hi {{first_name}}, ..."
+                className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none min-h-[120px]"
+              />
             </div>
           </div>
         )}

@@ -94,12 +94,33 @@ export const CustomNode = memo(({ data, selected }: any) => {
       )}
 
       {/* Output Handle */}
-      {data.type !== 'end' && (
+      {data.type !== 'end' && data.label !== 'Condition (If/Else)' && (
         <Handle 
           type="source" 
           position={Position.Bottom} 
           className="w-3 h-3 bg-white border-2 border-slate-900 -mb-1.5"
         />
+      )}
+      
+      {data.label === 'Condition (If/Else)' && (
+        <>
+          <Handle 
+            type="source" 
+            id="true"
+            position={Position.Bottom} 
+            className="w-3 h-3 bg-emerald-400 border-2 border-slate-900 -mb-1.5 !left-1/3"
+          />
+          <Handle 
+            type="source" 
+            id="false"
+            position={Position.Bottom} 
+            className="w-3 h-3 bg-red-400 border-2 border-slate-900 -mb-1.5 !left-2/3"
+          />
+          <div className="absolute -bottom-6 w-full flex justify-between px-8 text-[10px] font-bold pointer-events-none">
+            <span className="text-emerald-400/80">Yes</span>
+            <span className="text-red-400/80">No</span>
+          </div>
+        </>
       )}
     </div>
   );
