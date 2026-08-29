@@ -1,13 +1,44 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PhoneForwarded, Settings2, BarChart2, Users, Sliders, Play, Pause, Save, HardDrive, ListX, UploadCloud, RefreshCw, Plus } from 'lucide-react';
+import { PhoneForwarded, Settings2, BarChart2, Users, Sliders, Play, Pause, Save, HardDrive, ListX, UploadCloud, RefreshCw, Plus, Check } from 'lucide-react';
 
 export default function SmartDialerConfig() {
-  const [activeSection, setActiveSection] = useState('engine');
+  const [activeSection, setActiveSection] = useState('retry');
   const [isPaused, setIsPaused] = useState(false);
   const [pacingMode, setPacingMode] = useState('predictive');
   const [amdSensitivity, setAmdSensitivity] = useState(1500);
+
+  // New states for interactive features
+  const [dncSynced, setDncSynced] = useState(true);
+  
+  const [retryRules, setRetryRules] = useState([
+    { id: 1, status: 'Busy', interval: '15 Minutes', retries: 3, active: true },
+    { id: 2, status: 'No Answer', interval: '2 Hours', retries: 2, active: true },
+    { id: 3, status: 'Voicemail', interval: 'None (Do Not Retry)', retries: 0, active: false }
+  ]);
+
+  const handleAddRule = () => {
+    const newRule = {
+      id: Date.now(),
+      status: 'Custom Outcome',
+      interval: '30 Minutes',
+      retries: 1,
+      active: true
+    };
+    setRetryRules([...retryRules, newRule]);
+  };
+
+  const handleBrowseFiles = () => {
+    alert("File picker would open here. (Simulated CSV Upload)");
+  };
+
+  const handleAddNumber = () => {
+    const number = prompt("Enter a phone number to add to the DNC list:");
+    if (number) {
+      alert(`Number ${number} has been added to the DNC list.`);
+    }
+  };
 
   return (
     <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden text-sm flex flex-col md:flex-row h-[800px] shadow-sm">
@@ -55,10 +86,10 @@ export default function SmartDialerConfig() {
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-slate-900/30 flex flex-col relative">
         
-        {/* Header */}
-        <div className="p-8 border-b border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900/50 flex justify-between items-center sticky top-0 z-10">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        {/* Header - Added flex-wrap and min-w-0 to fix text overlapping */}
+        <div className="p-6 md:p-8 border-b border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900/50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 sticky top-0 z-10">
+          <div className="min-w-0">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white truncate">
               {activeSection === 'engine' && 'Predictive Engine Settings'}
               {activeSection === 'amd' && 'Answering Machine Detection (AMD)'}
               {activeSection === 'retry' && 'Call Retry Policies'}
@@ -71,7 +102,7 @@ export default function SmartDialerConfig() {
               {activeSection === 'dnc' && 'Manage compliance lists and sync with National DNC APIs.'}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 shrink-0">
             <button 
               onClick={() => setIsPaused(!isPaused)}
               className={`px-4 py-2 font-bold rounded-xl flex items-center gap-2 transition-colors ${isPaused ? 'bg-orange-100 dark:bg-orange-500/10 text-orange-700 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-500/20' : 'bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/20'}`}
@@ -86,7 +117,7 @@ export default function SmartDialerConfig() {
         </div>
 
         {/* Content Body */}
-        <div className="p-8 space-y-8 flex-1">
+        <div className="p-6 md:p-8 space-y-8 flex-1">
           
           {/* SECTION: ENGINE */}
           {activeSection === 'engine' && (
@@ -235,74 +266,73 @@ export default function SmartDialerConfig() {
 
           {/* SECTION: RETRY POLICIES */}
           {activeSection === 'retry' && (
-            <div className="bg-white dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden">
-               <div className="p-6 border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-950/50 flex justify-between items-center">
+            <div className="bg-white dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden flex flex-col">
+               <div className="p-6 border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-950/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shrink-0">
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                     <RefreshCw className="w-5 h-5 text-indigo-500" /> Retry Matrix
                   </h3>
-                  <button className="text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 hover:underline">
+                  <button 
+                    onClick={handleAddRule}
+                    className="text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 hover:underline shrink-0"
+                  >
                     <Plus className="w-4 h-4" /> Add Custom Rule
                   </button>
                </div>
                
-               <table className="w-full text-left text-sm">
-                  <thead className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10 text-gray-500 dark:text-slate-400 uppercase font-bold text-xs">
-                    <tr>
-                      <th className="px-6 py-4">Call Status / Outcome</th>
-                      <th className="px-6 py-4">Time Interval</th>
-                      <th className="px-6 py-4">Max Retries</th>
-                      <th className="px-6 py-4">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-white/5 text-gray-900 dark:text-white">
-                    <tr className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="px-6 py-4 font-bold">Busy</td>
-                      <td className="px-6 py-4">
-                         <select className="bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium">
-                           <option>15 Minutes</option>
-                           <option>30 Minutes</option>
-                           <option>1 Hour</option>
-                         </select>
-                      </td>
-                      <td className="px-6 py-4">
-                         <input type="number" defaultValue="3" className="w-16 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium" />
-                      </td>
-                      <td className="px-6 py-4">
-                         <span className="px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">Active</span>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="px-6 py-4 font-bold">No Answer</td>
-                      <td className="px-6 py-4">
-                         <select className="bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium">
-                           <option>2 Hours</option>
-                           <option>4 Hours</option>
-                           <option>Next Day</option>
-                         </select>
-                      </td>
-                      <td className="px-6 py-4">
-                         <input type="number" defaultValue="2" className="w-16 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium" />
-                      </td>
-                      <td className="px-6 py-4">
-                         <span className="px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">Active</span>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="px-6 py-4 font-bold">Voicemail</td>
-                      <td className="px-6 py-4">
-                         <select className="bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium text-gray-400" disabled>
-                           <option>None (Do Not Retry)</option>
-                         </select>
-                      </td>
-                      <td className="px-6 py-4">
-                         <input type="number" defaultValue="0" disabled className="w-16 bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium text-gray-400" />
-                      </td>
-                      <td className="px-6 py-4">
-                         <span className="px-2 py-1 rounded bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Disabled</span>
-                      </td>
-                    </tr>
-                  </tbody>
-               </table>
+               {/* Added overflow-x-auto to prevent table squishing */}
+               <div className="w-full overflow-x-auto">
+                 <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10 text-gray-500 dark:text-slate-400 uppercase font-bold text-xs">
+                      <tr>
+                        <th className="px-6 py-4">Call Status / Outcome</th>
+                        <th className="px-6 py-4">Time Interval</th>
+                        <th className="px-6 py-4">Max Retries</th>
+                        <th className="px-6 py-4">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 dark:divide-white/5 text-gray-900 dark:text-white">
+                      {retryRules.map((rule) => (
+                        <tr key={rule.id} className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+                          <td className="px-6 py-4 font-bold">{rule.status}</td>
+                          <td className="px-6 py-4">
+                             <select 
+                               className={`bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium ${!rule.active && 'text-gray-400'}`}
+                               defaultValue={rule.interval}
+                               disabled={!rule.active}
+                             >
+                               <option>{rule.interval}</option>
+                               {rule.active && (
+                                 <>
+                                   <option>15 Minutes</option>
+                                   <option>30 Minutes</option>
+                                   <option>1 Hour</option>
+                                   <option>2 Hours</option>
+                                   <option>4 Hours</option>
+                                   <option>Next Day</option>
+                                 </>
+                               )}
+                             </select>
+                          </td>
+                          <td className="px-6 py-4">
+                             <input 
+                               type="number" 
+                               defaultValue={rule.retries} 
+                               disabled={!rule.active}
+                               className={`w-16 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 outline-none font-medium ${!rule.active && 'text-gray-400 bg-gray-100 dark:bg-slate-900'}`} 
+                             />
+                          </td>
+                          <td className="px-6 py-4">
+                             {rule.active ? (
+                               <span className="px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">Active</span>
+                             ) : (
+                               <span className="px-2 py-1 rounded bg-gray-200 dark:bg-slate-800 text-gray-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Disabled</span>
+                             )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                 </table>
+               </div>
             </div>
           )}
 
@@ -314,13 +344,23 @@ export default function SmartDialerConfig() {
                      <UploadCloud className="w-8 h-8 text-gray-400 dark:text-slate-500 mb-3" />
                      <div className="font-bold text-gray-900 dark:text-white mb-1">Upload CSV</div>
                      <div className="text-xs text-gray-500 dark:text-slate-400 mb-4">Import custom Do-Not-Call numbers</div>
-                     <button className="px-4 py-2 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 font-bold rounded-lg transition-colors text-gray-900 dark:text-white">Browse Files</button>
+                     <button 
+                       onClick={handleBrowseFiles}
+                       className="px-4 py-2 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 font-bold rounded-lg transition-colors text-gray-900 dark:text-white"
+                     >
+                       Browse Files
+                     </button>
                   </div>
                   <div className="bg-white dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm p-6 flex flex-col items-center justify-center text-center h-48 border-dashed">
                      <ListX className="w-8 h-8 text-gray-400 dark:text-slate-500 mb-3" />
                      <div className="font-bold text-gray-900 dark:text-white mb-1">Manual Entry</div>
                      <div className="text-xs text-gray-500 dark:text-slate-400 mb-4">Add numbers one by one</div>
-                     <button className="px-4 py-2 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 font-bold rounded-lg transition-colors text-gray-900 dark:text-white">Add Number</button>
+                     <button 
+                       onClick={handleAddNumber}
+                       className="px-4 py-2 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 font-bold rounded-lg transition-colors text-gray-900 dark:text-white"
+                     >
+                       Add Number
+                     </button>
                   </div>
                </div>
 
@@ -330,11 +370,21 @@ export default function SmartDialerConfig() {
                   
                   <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-950/50 border border-gray-200 dark:border-white/10 rounded-xl">
                      <div>
-                       <div className="font-bold text-gray-900 dark:text-white flex items-center gap-2">US National DNC Registry <span className="px-2 py-0.5 rounded text-[10px] uppercase font-black bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400">Synced</span></div>
+                       <div className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                         US National DNC Registry 
+                         {dncSynced ? (
+                           <span className="px-2 py-0.5 rounded text-[10px] uppercase font-black bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400">Synced</span>
+                         ) : (
+                           <span className="px-2 py-0.5 rounded text-[10px] uppercase font-black bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400">Disconnected</span>
+                         )}
+                       </div>
                        <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">Last synced: Today at 2:00 AM</div>
                      </div>
-                     <div className="w-12 h-6 bg-indigo-600 rounded-full relative cursor-pointer shadow-inner">
-                        <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm" />
+                     <div 
+                       onClick={() => setDncSynced(!dncSynced)}
+                       className={`w-12 h-6 rounded-full relative cursor-pointer shadow-inner transition-colors ${dncSynced ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-slate-700'}`}
+                     >
+                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-all ${dncSynced ? 'right-1' : 'left-1'}`} />
                      </div>
                   </div>
                </div>
