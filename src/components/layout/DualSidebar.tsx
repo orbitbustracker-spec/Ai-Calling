@@ -153,7 +153,7 @@ export const DualSidebar = ({ role }: { role?: string }) => {
             <motion.div 
               key={activeModule.id}
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 224, opacity: 1 }}
+              animate={{ width: 192, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="glass-panel flex flex-col z-10 relative overflow-hidden overflow-y-auto border-l border-white/5"
@@ -161,11 +161,11 @@ export const DualSidebar = ({ role }: { role?: string }) => {
               {/* Subtle Background Glow */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
     
-              <div className="p-6 shrink-0 w-56">
+              <div className="p-6 shrink-0 w-48">
                 <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-wide uppercase">{activeModule.label}</h2>
               </div>
     
-              <div className="flex-1 px-4 space-y-1 w-56">
+              <div className="flex-1 px-4 space-y-1 w-48">
                 {activeModule.subItems.map((item: any) => {
                   const isExact = typeof window !== 'undefined' && window.location.search ? pathname + window.location.search === item.href : pathname === item.href;
                   const isActive = isExact || (pathname === item.href.split('?')[0] && !window.location.search && activeModule.subItems?.[0]?.href === item.href);
