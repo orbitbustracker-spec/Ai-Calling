@@ -15,16 +15,25 @@ export async function GET(req: Request) {
     );
 
     const email = 'baraldhar@gmail.com';
+    const password = 'Istuti@98510';
 
-    // First try to sign up (if they don't exist)
+    // 1. Force wipe any existing broken state
+    try {
+      await prisma.$executeRawUnsafe(`DELETE FROM public."User" WHERE email = $1;`, email);
+      await prisma.$executeRawUnsafe(`DELETE FROM auth.users WHERE email = $1;`, email);
+    } catch (wipeErr) {
+      console.warn("Wipe warning (safe to ignore if user didn't exist):", wipeErr);
+    }
+
+    // 2. Fresh Sign Up
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
-      password: 'Istuti@98510', // Updated to match user's screenshot
+      password, // Now guaranteed to be exactly 'Istuti@98510'
     });
 
-    // If there's an error and it's not "already registered", log it.
-    if (authError && authError.message !== 'User already registered') {
+    if (authError) {
       console.error('Supabase Auth error:', authError);
+      return NextResponse.json({ error: authError.message }, { status: 400 });
     }
 
     // Force confirm the email in auth.users directly via database
