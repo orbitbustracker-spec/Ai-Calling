@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import { Bot, Mic, Phone, ChevronRight, Zap, MessageSquare, Globe, Server, CheckCircle2 } from 'lucide-react';

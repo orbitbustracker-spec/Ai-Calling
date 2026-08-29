@@ -1,17 +1,18 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["*"], // Note: In production, specify exact domains
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
   typescript: {
     ignoreBuildErrors: true,
   },
-  allowedDevOrigins: ['127.0.0.1', 'localhost', '192.168.1.66'],
 };
 
-export default nextConfig as NextConfig;
+export default nextConfig;
