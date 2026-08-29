@@ -1,0 +1,1 @@
+const { createClient } = require('@supabase/supabase-js'); const supabase = createClient('https://ktnqomkuuisfafoaxwtc.supabase.co', 'sb_publishable_23yB5RRepeV_j-bDdg7hKQ_dY1puizt'); supabase.auth.signInWithPassword({email: 'baraldhar@gmail.com', password: 'Istuti98510'}).then(r => console.log(r)).catch(e => console.error(e));

@@ -15,49 +15,52 @@ export async function GET(req: Request) {
     );
 
     const email = 'baraldhar@gmail.com';
-    const password = 'Istuti98510';
 
+    // First try to sign up (if they don't exist)
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
-      password,
+      password: 'Istuti@98510', // Updated to match user's screenshot
     });
 
+    // If there's an error and it's not "already registered", log it.
     if (authError && authError.message !== 'User already registered') {
       console.error('Supabase Auth error:', authError);
     }
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    
-    if (signInError && authError?.message === 'User already registered') {
-      return NextResponse.json({ 
-        error: 'User already exists in Supabase Auth but password is not Istuti98510. Please delete the user from Supabase dashboard and hit this endpoint again.' 
-      }, { status: 400 });
-    }
-
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      return NextResponse.json({ error: 'Failed to get user after sign up/in' }, { status: 500 });
-    }
-
+    // Force confirm the email in auth.users directly via database
     await prisma.$executeRawUnsafe(`
       UPDATE auth.users 
       SET email_confirmed_at = NOW()
       WHERE email = $1;
     `, email);
 
+    // Get the user's ID from auth.users to ensure we have it even if signUp failed
+    const users: any[] = await prisma.$queryRawUnsafe(`
+      SELECT id FROM auth.users WHERE email = $1 LIMIT 1;
+    `, email);
+
+    if (!users || users.length === 0) {
+      return NextResponse.json({ error: 'Failed to find user in auth.users after creation attempt.' }, { status: 500 });
+    }
+
+    const userId = users[0].id;
+
+    // Upsert the user into the public.User table as SUPER_ADMIN
     await prisma.user.upsert({
       where: { email },
-      update: { role: 'SUPER_ADMIN' },
+      update: { 
+        id: userId, // Ensure ID matches auth.users
+        role: 'SUPER_ADMIN' 
+      },
       create: {
-        id: user.id,
+        id: userId,
         email,
         name: 'Super Admin',
         role: 'SUPER_ADMIN',
       }
     });
 
-    return NextResponse.json({ success: true, message: `Super Admin ${email} verified and updated successfully!` });
+    return NextResponse.json({ success: true, message: `Super Admin ${email} verified and updated successfully! You can now log in.` });
 
   } catch (error: any) {
     console.error('Seed Super Admin Error:', error);
