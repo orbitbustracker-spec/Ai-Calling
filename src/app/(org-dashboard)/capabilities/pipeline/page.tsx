@@ -132,7 +132,8 @@ function PipelineFlow() {
       
       <SidebarRight 
         selectedNode={selectedNode} 
-        onCallClick={() => setIsDialerOpen(true)} 
+        onCallClick={() => setIsDialerOpen(true)}
+        activeResource={activeResource}
       />
     </div>
   );

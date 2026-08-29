@@ -5,7 +5,6 @@ export function ResourceModals({ activeResource, onClose }: { activeResource: st
   const [editingScript, setEditingScript] = useState<number | null>(null);
   const [scriptText, setScriptText] = useState('');
   
-  const [knowledgeText, setKnowledgeText] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState([
     { name: 'Pricing_Sheet_2026.pdf', status: 'Processed' },
     { name: 'FAQ_Customer_Support.docx', status: 'Processed' }
@@ -148,11 +147,10 @@ export function ResourceModals({ activeResource, onClose }: { activeResource: st
           )}
 
           {activeResource === 'knowledge' && (
-            <div className="h-full flex gap-6">
+            <div className="h-full flex flex-col gap-6 max-w-2xl mx-auto">
               
-              {/* Left Side: Upload Documents */}
               <div className="flex-1 flex flex-col gap-6">
-                <label className="border-2 border-dashed border-white/20 rounded-3xl p-8 flex flex-col items-center justify-center text-center hover:bg-white/5 hover:border-orange-500/50 transition-all cursor-pointer group flex-1">
+                <label className="border-2 border-dashed border-white/20 rounded-3xl p-12 flex flex-col items-center justify-center text-center hover:bg-white/5 hover:border-orange-500/50 transition-all cursor-pointer group flex-1">
                   <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <UploadCloud className="w-8 h-8 text-white/50 group-hover:text-orange-400 transition-colors" />
                   </div>
@@ -168,7 +166,7 @@ export function ResourceModals({ activeResource, onClose }: { activeResource: st
                       <div key={idx} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
                         <div className="flex items-center gap-3">
                           <FileText className="w-4 h-4 text-orange-400" /> 
-                          <span className="text-sm font-medium text-white/90 truncate max-w-[180px]">{file.name}</span>
+                          <span className="text-sm font-medium text-white/90 truncate max-w-[400px]">{file.name}</span>
                         </div>
                         <span className={`text-xs ${file.status === 'Processed' ? 'text-emerald-400' : 'text-orange-400 animate-pulse'}`}>{file.status}</span>
                       </div>
@@ -177,24 +175,6 @@ export function ResourceModals({ activeResource, onClose }: { activeResource: st
                 </div>
               </div>
 
-              {/* Right Side: Free Text Entry */}
-              <div className="flex-1 flex flex-col bg-white/5 border border-white/10 rounded-3xl p-6">
-                 <div className="flex justify-between items-center mb-4">
-                   <div>
-                     <h3 className="text-lg font-bold text-white">Manual Text Entry</h3>
-                     <p className="text-xs text-white/50">Type direct instructions or FAQs</p>
-                   </div>
-                   <button onClick={() => alert('Text saved to Knowledge Base')} className="p-2 bg-orange-500/20 text-orange-400 hover:bg-orange-500/40 rounded-xl transition-colors">
-                     <Save className="w-4 h-4" />
-                   </button>
-                 </div>
-                 <textarea
-                   value={knowledgeText}
-                   onChange={(e) => setKnowledgeText(e.target.value)}
-                   className="flex-1 w-full bg-black/20 border border-white/5 rounded-2xl p-4 text-sm text-white placeholder-white/30 resize-none outline-none focus:border-orange-500/50"
-                   placeholder="E.g. Our return policy is 30 days. Our business hours are 9 AM to 5 PM EST..."
-                 />
-              </div>
             </div>
           )}
 

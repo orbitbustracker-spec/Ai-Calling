@@ -1,11 +1,43 @@
 'use client';
 
-import React from 'react';
-import { Settings, Phone, MessageCircle, Clock, Zap, Mail } from 'lucide-react';
+import React, { useState } from 'react';
+import { Settings, Phone, MessageCircle, Clock, Zap, Mail, Save } from 'lucide-react';
 import { Button } from '@/components/Button';
 
-export function SidebarRight({ selectedNode, onCallClick }: { selectedNode: any, onCallClick: () => void }) {
+export function SidebarRight({ selectedNode, onCallClick, activeResource }: { selectedNode: any, onCallClick: () => void, activeResource?: string | null }) {
+  const [knowledgeText, setKnowledgeText] = useState('');
   
+  if (activeResource === 'knowledge') {
+    return (
+      <div className="w-80 bg-slate-900/50 backdrop-blur-xl border-l border-white/10 p-6 flex flex-col z-10">
+        <h2 className="text-lg font-bold text-white mb-2">Properties</h2>
+        
+        <div className="flex-1 flex flex-col mt-4 space-y-4">
+           <div className="flex justify-between items-center">
+             <div>
+               <h3 className="text-sm font-bold text-white bg-blue-600 px-2 py-1 rounded inline-block">Manual Text Entry</h3>
+               <p className="text-xs text-white/50 mt-1">Type direct instructions or FAQs</p>
+             </div>
+             <button onClick={() => alert('Text saved to Knowledge Base')} className="p-2 bg-orange-500/20 text-orange-400 hover:bg-orange-500/40 rounded-xl transition-colors">
+               <Save className="w-4 h-4" />
+             </button>
+           </div>
+           
+           <p className="text-[10px] text-white/40 leading-tight">
+             E.g. Our return policy is 30 days. Our business hours are 9 AM to 5 PM EST...
+           </p>
+
+           <textarea
+             value={knowledgeText}
+             onChange={(e) => setKnowledgeText(e.target.value)}
+             className="flex-1 w-full bg-slate-900 border border-white/10 rounded-2xl p-4 text-sm text-white placeholder-white/30 resize-none outline-none focus:border-orange-500/50 h-full min-h-[300px]"
+             placeholder="Type your instructions here..."
+           />
+        </div>
+      </div>
+    );
+  }
+
   if (!selectedNode) {
     return (
       <div className="w-80 bg-slate-900/50 backdrop-blur-xl border-l border-white/10 p-6 flex flex-col z-10">
