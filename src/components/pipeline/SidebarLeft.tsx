@@ -47,7 +47,7 @@ const NODE_TYPES = [
   }
 ];
 
-export function SidebarLeft() {
+export function SidebarLeft({ onResourceClick }: { onResourceClick?: (id: string) => void }) {
   const [activeTab, setActiveTab] = React.useState<'workflow' | 'resources'>('workflow');
 
   const onDragStart = (event: React.DragEvent, nodeType: string, nodeData: any) => {
@@ -58,6 +58,7 @@ export function SidebarLeft() {
 
   return (
     <div className="w-80 bg-[#4F6474]/40 backdrop-blur-3xl border-r border-white/10 p-5 flex flex-col gap-6 overflow-y-auto z-10 shadow-2xl">
+
       
       {/* Top Tabs */}
       <div className="flex items-center p-1 bg-white/10 rounded-full border border-white/5 flex-shrink-0">
@@ -117,7 +118,7 @@ export function SidebarLeft() {
       ) : (
         <div className="flex-1 flex flex-col gap-6 pb-4">
           
-          <div className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
+          <div onClick={() => onResourceClick?.('prompts')} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 bg-indigo-500/20 text-indigo-400 rounded-lg">
                 <Bot className="w-5 h-5" />
@@ -129,7 +130,7 @@ export function SidebarLeft() {
             </p>
           </div>
 
-          <div className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
+          <div onClick={() => onResourceClick?.('integrations')} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 bg-emerald-500/20 text-emerald-400 rounded-lg">
                 <LinkIcon className="w-5 h-5" />
@@ -141,7 +142,7 @@ export function SidebarLeft() {
             </p>
           </div>
 
-          <div className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
+          <div onClick={() => onResourceClick?.('knowledge')} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 bg-orange-500/20 text-orange-400 rounded-lg">
                 <FileText className="w-5 h-5" />
@@ -153,7 +154,7 @@ export function SidebarLeft() {
             </p>
           </div>
 
-          <div className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
+          <div onClick={() => onResourceClick?.('contacts')} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors cursor-pointer group">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 bg-sky-500/20 text-sky-400 rounded-lg">
                 <Users className="w-5 h-5" />
