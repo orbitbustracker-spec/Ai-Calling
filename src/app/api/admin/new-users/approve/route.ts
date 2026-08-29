@@ -6,24 +6,59 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
-    const { id } = await req.json();
+    const { id, companyName, isOmnichannelActive, isCommerceActive, initialMinutes } = await req.json();
 
     const pending = await prisma.pendingRegistration.findUnique({ where: { id } });
     if (!pending) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-    // Mark as approved
+    const finalCompanyName = companyName || pending.companyName;
+    const startingMinutes = parseInt(initialMinutes) || 0;
+
+    // Mark as approved and update company name in case it was edited
     await prisma.pendingRegistration.update({
       where: { id },
-      data: { status: 'APPROVED' }
-    });
-
-    // Create the Organization
-    const org = await prisma.organization.create({
-      data: {
-        name: pending.companyName,
-        isActive: true
+      data: { 
+        status: 'APPROVED',
+        companyName: finalCompanyName
       }
     });
+
+    // Create the Organization with settings
+    const org = await prisma.organization.create({
+      data: {
+        name: finalCompanyName,
+        isActive: true,
+        isOmnichannelActive: Boolean(isOmnichannelActive),
+        isCommerceActive: Boolean(isCommerceActive),
+        commerceMinutes: isCommerceActive ? 500 : 0
+      }
+    });
+
+    // Setup Balance
+    if (startingMinutes > 0) {
+      await prisma.organizationBalance.create({
+        data: {
+          organizationId: org.id,
+          remainingMinutes: startingMinutes
+        }
+      });
+      
+      const starterPkg = await prisma.package.findFirst({ where: { isActive: true } });
+      if (starterPkg) {
+        await prisma.packageAssignment.create({
+          data: {
+            organizationId: org.id,
+            packageId: starterPkg.id,
+            purchasedMinutes: startingMinutes,
+            usedMinutes: 0,
+            remainingMinutes: startingMinutes,
+            packagePrice: starterPkg.calculatedPrice || 0,
+            ratePerMinuteAtPurchase: starterPkg.ratePerMinute || 0,
+            status: 'ACTIVE'
+          }
+        });
+      }
+    }
 
     // Send Approval Email using NodeMailer (Requires SMTP env vars in Vercel)
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {

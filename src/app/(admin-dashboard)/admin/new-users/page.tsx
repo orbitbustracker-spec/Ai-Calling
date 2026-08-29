@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/Button';
 import { Building, Globe, Mail, Phone, User, CheckCircle2, XCircle, Users, Settings, Edit, Trash2 } from 'lucide-react';
+import ApproveUserModal from './ApproveUserModal';
 
 export default function NewUsersPage() {
   const [activeTab, setActiveTab] = useState<'pending' | 'active'>('pending');
@@ -14,6 +15,8 @@ export default function NewUsersPage() {
   const [editingUser, setEditingUser] = useState<any>(null);
   const [editRole, setEditRole] = useState('');
   const [editOrgId, setEditOrgId] = useState('');
+
+  const [approvingUser, setApprovingUser] = useState<any>(null);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -36,20 +39,6 @@ export default function NewUsersPage() {
   useEffect(() => {
     fetchUsers();
   }, []);
-
-  const handleApprove = async (id: string) => {
-    const res = await fetch(`/api/admin/new-users/approve`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id })
-    });
-    if (res.ok) {
-      alert("User Approved and Email Sent!");
-      fetchUsers();
-    } else {
-      alert("Error approving user.");
-    }
-  };
 
   const handleUpdateUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +65,12 @@ export default function NewUsersPage() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 h-full overflow-y-auto">
+      <ApproveUserModal 
+        user={approvingUser} 
+        isOpen={!!approvingUser} 
+        onClose={() => setApprovingUser(null)}
+        onApproved={fetchUsers}
+      />
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
@@ -150,14 +145,14 @@ export default function NewUsersPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 w-full md:w-auto">
-                  <Button onClick={() => alert("Request Rejected")} className="bg-red-50 hover:bg-red-100 text-red-600 font-medium border border-red-200 px-6 py-2">
-                    <XCircle className="h-4 w-4 mr-2" /> Reject
-                  </Button>
-                  <Button onClick={() => handleApprove(user.id)} className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 shadow">
-                    <CheckCircle2 className="h-4 w-4 mr-2" /> Approve & Notify
-                  </Button>
-                </div>
+                  <div className="flex gap-4">
+                    <Button onClick={() => alert("Request Rejected")} className="bg-red-50 hover:bg-red-100 text-red-600 font-medium border border-red-200 px-6 py-2">
+                      <XCircle className="h-4 w-4 mr-2" /> Reject
+                    </Button>
+                    <Button onClick={() => setApprovingUser(user)} className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 shadow">
+                      <CheckCircle2 className="h-4 w-4 mr-2" /> Approve & Configure
+                    </Button>
+                  </div>
               </div>
             ))}
           </div>
