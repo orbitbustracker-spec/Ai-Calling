@@ -18,8 +18,10 @@ import PersonalizedMessages from './components/PersonalizedMessages';
 import CallManagement from './components/CallManagement';
 import WhatsAppAI from './components/WhatsAppAI';
 import AnalyticsInsights from './components/AnalyticsInsights';
+import WorkspaceDashboard from './components/WorkspaceDashboard';
 
 const CAPABILITIES = {
+  'dashboard': { title: 'Workspace Dashboard', component: WorkspaceDashboard },
   'extensions': { title: 'SIP Extensions', component: ExtensionsConfig },
   'voicemail': { title: 'Visual Voicemail & AI Transcripts', component: VoicemailConfig },
   'three-way-calling': { title: '3-Way Calling & Supervisor Intercept', component: ThreeWayCallingConfig },
