@@ -103,7 +103,7 @@ function PipelineFlow() {
   }, []);
 
   return (
-    <div className="flex h-full w-full bg-gradient-to-br from-[#536979] to-[#8C7672] font-sans overflow-hidden text-white relative">
+    <div className="flex h-full w-full bg-transparent font-sans overflow-hidden text-slate-900 dark:text-white relative rounded-2xl shadow-sm dark:shadow-none">
       <SidebarLeft onResourceClick={(id) => setActiveResource(id)} />
       
       <div className="flex-1 h-full relative" ref={reactFlowWrapper}>

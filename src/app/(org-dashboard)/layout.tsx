@@ -14,12 +14,12 @@ export default async function OrgDashboardLayout({ children }: { children: React
   }
 
   return (
-    <div className="flex h-screen text-white overflow-hidden relative">
+    <div className="flex h-screen text-slate-900 dark:text-white overflow-hidden relative">
       {/* Dynamic Mesh Gradient Background */}
-      <div className="fixed inset-0 z-0 bg-gradient-to-br from-[#536979] to-[#8C7672] transition-colors duration-500">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px] mix-blend-overlay pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-black/10 rounded-full blur-[150px] mix-blend-overlay pointer-events-none animate-pulse" style={{ animationDuration: '10s' }} />
-        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-indigo-900/20 rounded-full blur-[100px] mix-blend-overlay pointer-events-none animate-pulse" style={{ animationDuration: '12s' }} />
+      <div className="fixed inset-0 z-0 bg-[#f8fafc] dark:bg-gradient-to-br dark:from-[#536979] dark:to-[#8C7672] transition-colors duration-500">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-200/50 dark:bg-white/5 rounded-full blur-[120px] dark:mix-blend-overlay pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-200/50 dark:bg-black/10 rounded-full blur-[150px] dark:mix-blend-overlay pointer-events-none animate-pulse" style={{ animationDuration: '10s' }} />
+        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-blue-200/50 dark:bg-indigo-900/20 rounded-full blur-[100px] dark:mix-blend-overlay pointer-events-none animate-pulse" style={{ animationDuration: '12s' }} />
       </div>
 
       <div className="relative z-10 flex w-full h-full">
