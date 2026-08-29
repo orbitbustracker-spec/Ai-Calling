@@ -187,7 +187,10 @@ export default function CampaignsConfig() {
 
                <div>
                   <label className="block text-sm font-bold text-gray-700 dark:text-slate-300 mb-2">Contact List (Lead Source)</label>
-                  <div className="border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl p-8 text-center bg-gray-50 dark:bg-slate-950/50 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-900 transition-colors">
+                  <div 
+                    onClick={() => alert('File picker dialog would open here. (Simulated CSV Upload)')}
+                    className="border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl p-8 text-center bg-gray-50 dark:bg-slate-950/50 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-900 transition-colors"
+                  >
                      <Users className="w-8 h-8 text-indigo-500 mx-auto mb-3" />
                      <div className="font-bold text-gray-900 dark:text-white">Upload CSV or Select CRM Segment</div>
                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Supports mapped HubSpot lists and direct imports.</p>
