@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PhoneOutgoing, Users, Activity, Settings, BarChart3, Plus, Pause, Play, StopCircle } from 'lucide-react';
+import { PhoneOutgoing, Users, Activity, Settings, BarChart3, Plus, Pause, Play, StopCircle, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const CAMPAIGNS = [
@@ -11,6 +11,7 @@ const CAMPAIGNS = [
 
 export default function CampaignsConfig() {
   const [activeTab, setActiveTab] = useState('live');
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   return (
     <div className="w-full text-slate-900 dark:text-slate-200">
@@ -38,7 +39,10 @@ export default function CampaignsConfig() {
           </button>
         </div>
         
-        <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-colors">
+        <button 
+          onClick={() => setShowCreateModal(true)}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-colors"
+        >
           <Plus className="w-4 h-4" /> Create Campaign
         </button>
       </div>
@@ -138,6 +142,64 @@ export default function CampaignsConfig() {
         <div className="p-12 text-center text-gray-500 dark:text-slate-400 font-medium bg-white dark:bg-slate-900/50 rounded-2xl border border-gray-200 dark:border-white/10">
           <Settings className="w-12 h-12 text-indigo-500 mx-auto mb-4 opacity-50" />
           Settings panel for Predictive Dialer will be displayed here.
+        </div>
+      )}
+
+      {/* Create Campaign Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden"
+          >
+            <div className="p-6 border-b border-gray-200 dark:border-white/10 flex justify-between items-center bg-gray-50 dark:bg-slate-950/50">
+               <h2 className="text-xl font-bold text-gray-900 dark:text-white">Create New Campaign</h2>
+               <button onClick={() => setShowCreateModal(false)} className="text-gray-500 hover:bg-gray-200 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors">
+                 <X className="w-5 h-5" />
+               </button>
+            </div>
+            
+            <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+               <div>
+                  <label className="block text-sm font-bold text-gray-700 dark:text-slate-300 mb-2">Campaign Name</label>
+                  <input type="text" placeholder="e.g. Q4 Black Friday Promo" className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-indigo-500" />
+               </div>
+               
+               <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 dark:text-slate-300 mb-2">Dialer Type</label>
+                    <select className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-indigo-500">
+                      <option>Predictive (AI-paced)</option>
+                      <option>Progressive (1-to-1)</option>
+                      <option>Preview (Manual)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 dark:text-slate-300 mb-2">Agent Group</label>
+                    <select className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-indigo-500">
+                      <option>Sales Team (East)</option>
+                      <option>Support Tier 1</option>
+                      <option>Renewals Squad</option>
+                    </select>
+                  </div>
+               </div>
+
+               <div>
+                  <label className="block text-sm font-bold text-gray-700 dark:text-slate-300 mb-2">Contact List (Lead Source)</label>
+                  <div className="border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl p-8 text-center bg-gray-50 dark:bg-slate-950/50 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-900 transition-colors">
+                     <Users className="w-8 h-8 text-indigo-500 mx-auto mb-3" />
+                     <div className="font-bold text-gray-900 dark:text-white">Upload CSV or Select CRM Segment</div>
+                     <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Supports mapped HubSpot lists and direct imports.</p>
+                  </div>
+               </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-950/50 flex justify-end gap-3">
+               <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 font-bold rounded-xl text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+               <button onClick={() => setShowCreateModal(false)} className="px-5 py-2.5 font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md transition-colors">Launch Campaign</button>
+            </div>
+          </motion.div>
         </div>
       )}
 
