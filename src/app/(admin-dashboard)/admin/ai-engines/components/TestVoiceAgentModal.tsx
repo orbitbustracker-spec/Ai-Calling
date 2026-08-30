@@ -19,6 +19,14 @@ export default function TestVoiceAgentModal({
   const [chatHistory, setChatHistory] = useState<{role: 'agent'|'user', text: string}[]>([]);
   const [knowledgeContext, setKnowledgeContext] = useState("");
 
+  const speakText = (text: string) => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "ne-NP";
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   const startSimulatedCall = async () => {
     setStatus("Connecting to AI Engine Pipeline...");
     try {
@@ -26,6 +34,7 @@ export default function TestVoiceAgentModal({
       await new Promise(r => setTimeout(r, 1500));
       setStatus("Connected (Pipeline Active)");
       setChatHistory([{ role: 'agent', text: greeting }]);
+      speakText(greeting);
     } catch (error) {
       console.error(error);
       setStatus("Error: Pipeline Failed. Check localhost services.");
@@ -42,6 +51,8 @@ export default function TestVoiceAgentModal({
     setStatus("Processing (LLM -> TTS)...");
     
     // Simulate STT and LLM response
+    const responseText = "??? ????? ? ?? ????????, ????? ???? ????? ????? ????????? ????? ????? ????? ??";
+    speakText(responseText);
     setTimeout(() => {
       setChatHistory(prev => [
         ...prev, 
