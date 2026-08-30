@@ -209,17 +209,17 @@ export function AIEnginesClient({ initialGlobalNodes, organizations }: { initial
 
       {showNodeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 dark:bg-gray-900/50 dark:bg-slate-950/80 backdrop-blur-sm">
-           <form onSubmit={handleCreateNode} className="bg-white dark:bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-200 dark:border-white/10 w-full max-w-lg shadow-2xl">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:text-white flex items-center gap-2">
+           <form onSubmit={handleCreateNode} autoComplete="off" className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-white/10 w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
+              <div className="flex justify-between items-center p-6 border-b border-slate-200 dark:border-white/10 shrink-0">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <TerminalSquare className="w-5 h-5 text-indigo-600 dark:text-indigo-400" /> Create Global AI Node
                 </h3>
-                <button type="button" onClick={()=>setShowNodeModal(false)} className="text-slate-500 dark:text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-900 dark:text-white"><X className="w-5 h-5"/></button>
+                <button type="button" onClick={()=>setShowNodeModal(false)} className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"><X className="w-5 h-5"/></button>
               </div>
 
-              <div className="space-y-4">
+              <div className="p-6 space-y-4 overflow-y-auto">
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-1 uppercase">Preset Provider</label>
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase">Preset Provider</label>
                     <select onChange={(e) => {
                       const val = e.target.value;
                       if(val === 'groq_llm') setNodeForm({...nodeForm, type: 'LLM', endpoint: 'https://api.groq.com/openai/v1/chat/completions', modelId: 'openai/gpt-oss-20b', name: 'Groq LLM'});
@@ -228,7 +228,7 @@ export function AIEnginesClient({ initialGlobalNodes, organizations }: { initial
                       if(val === 'google_tts') setNodeForm({...nodeForm, type: 'TTS', endpoint: 'https://texttospeech.googleapis.com/v1/text:synthesize', modelId: 'ne-NP-Neural2-A', name: 'Google Cloud TTS'});
                       if(val === 'gemini_llm') setNodeForm({...nodeForm, type: 'LLM', endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', modelId: 'gemini-2.0-flash', name: 'Google Gemini (LLM)'});
                       if(val === 'google_stt') setNodeForm({...nodeForm, type: 'STT', endpoint: 'https://speech.googleapis.com/v1/speech:recognize', modelId: 'default', name: 'Google Cloud Speech-to-Text (STT)'});
-                    }} className="w-full bg-white dark:bg-white dark:bg-slate-900 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-lg px-4 py-2 text-sm focus:outline-none mb-4">
+                    }} className="w-full bg-white dark:bg-slate-900 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-lg px-4 py-2 text-sm focus:outline-none mb-4">
                       <option value="">-- Choose a Quick Preset --</option>
                       <option value="gemini_llm">Google Gemini (LLM)</option>
                       <option value="google_stt">Google Cloud Speech-to-Text (STT)</option>
@@ -239,35 +239,35 @@ export function AIEnginesClient({ initialGlobalNodes, organizations }: { initial
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-1 uppercase">Node Name</label>
-                    <input required value={nodeForm.name} onChange={e=>setNodeForm({...nodeForm, name: e.target.value})} type="text" placeholder="e.g. Groq LLM" className="w-full bg-gray-50 dark:bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none" />
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase">Node Name</label>
+                    <input required autoComplete="off" value={nodeForm.name} onChange={e=>setNodeForm({...nodeForm, name: e.target.value})} type="text" placeholder="e.g. Groq LLM" className="w-full bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-1 uppercase">Engine Type</label>
-                    <select required value={nodeForm.type} onChange={e=>setNodeForm({...nodeForm, type: e.target.value})} className="w-full bg-gray-50 dark:bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none">
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase">Engine Type</label>
+                    <select required value={nodeForm.type} onChange={e=>setNodeForm({...nodeForm, type: e.target.value})} className="w-full bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:border-indigo-500 focus:outline-none">
                       <option value="LLM">LLM (Language Model)</option>
                       <option value="STT">STT (Speech to Text)</option>
                       <option value="TTS">TTS (Text to Speech)</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-1 uppercase">Base URL / Endpoint</label>
-                    <input required value={nodeForm.endpoint} onChange={e=>setNodeForm({...nodeForm, endpoint: e.target.value})} type="url" placeholder="https://api..." className="w-full bg-gray-50 dark:bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-900 dark:text-white font-mono focus:border-indigo-500 focus:outline-none" />
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase">Base URL / Endpoint</label>
+                    <input required autoComplete="off" value={nodeForm.endpoint} onChange={e=>setNodeForm({...nodeForm, endpoint: e.target.value})} type="url" placeholder="https://api..." className="w-full bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white font-mono focus:border-indigo-500 focus:outline-none" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-1 uppercase">Model ID (Optional)</label>
-                    <input value={nodeForm.modelId} onChange={e=>setNodeForm({...nodeForm, modelId: e.target.value})} type="text" placeholder="e.g. llama3:8b" className="w-full bg-gray-50 dark:bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-900 dark:text-white font-mono focus:border-indigo-500 focus:outline-none" />
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase">Model ID (Optional)</label>
+                    <input autoComplete="new-password" value={nodeForm.modelId} onChange={e=>setNodeForm({...nodeForm, modelId: e.target.value})} type="text" placeholder="e.g. llama3:8b" className="w-full bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white font-mono focus:border-indigo-500 focus:outline-none" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-500 dark:text-slate-400 mb-1 uppercase">API Key / Auth Token (Optional)</label>
-                    <input value={nodeForm.authKey} onChange={e=>setNodeForm({...nodeForm, authKey: e.target.value})} type="password" placeholder="sk-..." className="w-full bg-gray-50 dark:bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-900 dark:text-white font-mono focus:border-indigo-500 focus:outline-none" />
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase">API Key / Auth Token (Optional)</label>
+                    <input autoComplete="new-password" value={nodeForm.authKey} onChange={e=>setNodeForm({...nodeForm, authKey: e.target.value})} type="password" placeholder="sk-..." className="w-full bg-gray-50 dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white font-mono focus:border-indigo-500 focus:outline-none" />
                     <p className="text-[10px] text-slate-500 mt-1">This key will be encrypted in the database.</p>
                   </div>
               </div>
               
-              <div className="flex gap-3 mt-8">
-                <Button type="button" onClick={()=>setShowNodeModal(false)} className="flex-1 bg-transparent border border-slate-200 dark:border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:text-slate-900 dark:text-white">Cancel</Button>
-                <Button type="submit" disabled={savingNode} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-slate-900 dark:text-white font-bold">{savingNode ? 'Saving...' : 'Save AI Node'}</Button>
+              <div className="flex gap-3 p-6 border-t border-slate-200 dark:border-white/10 shrink-0">
+                <Button type="button" onClick={()=>setShowNodeModal(false)} className="flex-1 bg-transparent border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">Cancel</Button>
+                <Button type="submit" disabled={savingNode} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold">{savingNode ? 'Saving...' : 'Save AI Node'}</Button>
               </div>
            </form>
         </div>
