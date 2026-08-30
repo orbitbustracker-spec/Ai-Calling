@@ -79,9 +79,9 @@ export function TelephonyClient({ initialTrunks, organizations }: { initialTrunk
         </Button>
       </div>
 
-      <div className="bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden flex flex-col flex-1">
+      <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden flex flex-col flex-1 shadow-sm">
         <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300">
-          <thead className="bg-slate-950/50 border-b border-slate-200 dark:border-white/10 uppercase text-[10px] font-bold text-slate-500 tracking-wider">
+          <thead className="bg-gray-50 dark:bg-slate-950/50 border-b border-gray-200 dark:border-white/10 uppercase text-[10px] font-bold text-slate-500 tracking-wider">
             <tr>
               <th className="p-5">Organization</th>
               <th className="p-5">Provider / Label</th>
