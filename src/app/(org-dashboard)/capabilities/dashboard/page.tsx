@@ -1,20 +1,21 @@
-﻿'use client';
+
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Network, Server, PhoneCall, Megaphone, Activity, Info, CheckCircle2 } from 'lucide-react';
 
-function timeAgo(dateParam: string | Date) {
+function timeAgo(dateParam) {
   const date = typeof dateParam === 'object' ? dateParam : new Date(dateParam);
   const seconds = Math.round((new Date().getTime() - date.getTime()) / 1000);
   const minutes = Math.round(seconds / 60);
-  if (minutes < 60) return \\m ago\;
+  if (minutes < 60) return `${minutes}m ago`;
   const hours = Math.round(minutes / 60);
-  if (hours < 24) return \\h ago\;
-  return \\d ago\;
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.round(hours / 24)}d ago`;
 }
 
 export default function DashboardPage() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,16 +62,16 @@ export default function DashboardPage() {
         
         {/* Technical Details (PBX/SIP) */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className={\p-6 rounded-2xl border \\}>
+          <div className={`p-6 rounded-2xl border ${hasTrunks ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800/30' : 'bg-rose-50 dark:bg-rose-900/10 border-rose-200 dark:border-rose-800/30'}`}>
              <div className="flex items-center gap-3 mb-2">
-               <Network className={\w-6 h-6 \\} />
+               <Network className={`w-6 h-6 ${hasTrunks ? 'text-emerald-600' : 'text-rose-600'}`} />
                <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">SIP Trunk Status</h3>
              </div>
-             <p className={\	ext-2xl font-black \\}>
+             <p className={`text-2xl font-black ${hasTrunks ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}>
                {hasTrunks ? 'Online' : 'Offline'}
              </p>
-             <p className={\	ext-sm font-semibold \\}>
-               {hasTrunks ? \\ Active Trunk(s)\ : 'No Trunks Configured'}
+             <p className={`text-sm font-semibold ${hasTrunks ? 'text-emerald-600/80 dark:text-emerald-400/80' : 'text-rose-600/80 dark:text-rose-400/80'}`}>
+               {hasTrunks ? `${trunks.length} Active Trunk(s)` : 'No Trunks Configured'}
              </p>
           </div>
 
@@ -134,23 +135,23 @@ export default function DashboardPage() {
                <div className="p-8 text-center text-slate-500">No calls found in this organization.</div>
             ) : (
               <div className="divide-y divide-slate-100 dark:divide-white/5">
-                {recentCalls.map((call: any) => (
+                {recentCalls.map((call) => (
                   <div key={call.id} className="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors flex items-center justify-between group">
                     <div className="flex items-center gap-4">
-                      <div className={\w-10 h-10 rounded-full flex items-center justify-center \\}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${call.direction === 'INBOUND' ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' : 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'}`}>
                         <PhoneCall className="w-4 h-4" />
                       </div>
                       <div>
                         <h4 className="font-bold text-slate-900 dark:text-slate-200 text-sm">{call.toNumber || call.fromNumber || 'Unknown'}</h4>
                         <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-1">
                           <span className="uppercase font-semibold tracking-wider">{call.direction}</span>
-                          <span>•</span>
+                          <span>�</span>
                           <span>{call.durationSeconds}s</span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                       <span className={\	ext-xs font-bold px-2 py-1 rounded-md \\}>
+                       <span className={`text-xs font-bold px-2 py-1 rounded-md ${call.status === 'COMPLETED' ? 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' : 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400'}`}>
                          {call.status}
                        </span>
                        <p className="text-[10px] text-slate-400 mt-1">{timeAgo(call.createdAt)}</p>
@@ -181,7 +182,7 @@ export default function DashboardPage() {
                </div>
             ) : (
               <div className="p-4 space-y-3">
-                 {trunks.map((trunk: any) => (
+                 {trunks.map((trunk) => (
                     <div key={trunk.id} className="p-4 rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-between">
                        <div>
                          <h4 className="font-bold text-slate-900 dark:text-white">{trunk.providerLabel}</h4>
