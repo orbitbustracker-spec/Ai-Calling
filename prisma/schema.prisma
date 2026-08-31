@@ -512,6 +512,8 @@ model OmnichannelIntegration {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   provider       String       // "WHATSAPP", "MESSENGER", "INSTAGRAM", "TIKTOK", "TELEGRAM", "VIBER"
   isActive       Boolean      @default(false)
+    status         String       @default("PENDING") // PENDING, APPROVED, ACTIVE
+    requestedBy    String?
   credentials    Json         @default("{}")
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -652,3 +654,4 @@ model CrmReminder {
 
   @@index([organizationId])
 }
+
