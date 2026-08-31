@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { db as prisma } from '@/lib/db';
+import { PrismaClient } from '@prisma/client';
 import { requireOrganizationMember } from '@/lib/authorization';
+
+const prisma = new PrismaClient();
 
 export async function GET() {
   try {
@@ -8,7 +10,7 @@ export async function GET() {
 
     const org = await prisma.organization.findUnique({
       where: { id: organizationId },
-      select: { textCredits: true }
+      select: { commerceMinutes: true }
     });
 
     const integrations = await prisma.omnichannelIntegration.findMany({
@@ -16,7 +18,7 @@ export async function GET() {
       select: { provider: true, isActive: true, status: true }
     });
 
-    return NextResponse.json({ integrations, textCredits: org?.textCredits || 0 });
+    return NextResponse.json({ integrations, commerceMinutes: org?.commerceMinutes || 0 });
   } catch (error) {
     console.error('Fetch Integrations Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

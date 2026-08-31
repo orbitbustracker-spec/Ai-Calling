@@ -37,7 +37,7 @@ export const Icons = {
 export default function IntegrationsClient() {
   const [selectedProvider, setSelectedProvider] = useState('WHATSAPP');
   const [integrations, setIntegrations] = useState<any[]>([]);
-  const [textCredits, setTextCredits] = useState(0);
+  const [commerceMinutes, setTextCredits] = useState(0);
   const [loading, setLoading] = useState(true);
   const [requesting, setRequesting] = useState(false);
 
@@ -56,7 +56,7 @@ export default function IntegrationsClient() {
       .then(res => res.json())
       .then(data => {
         setIntegrations(data.integrations || []);
-        setTextCredits(data.textCredits || 0);
+        setTextCredits(data.commerceMinutes || 0);
         setLoading(false);
       })
       .catch(err => {
@@ -93,7 +93,7 @@ export default function IntegrationsClient() {
   // Status logic
   const isApproved = currentIntegration?.status === 'ACTIVE' || currentIntegration?.status === 'APPROVED';
   const isPending = currentIntegration?.status === 'PENDING';
-  const hasCredits = textCredits > 0;
+  const hasCredits = commerceMinutes > 0;
   const fullyActive = isApproved && hasCredits;
 
   return (

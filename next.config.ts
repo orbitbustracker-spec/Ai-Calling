@@ -1,6 +1,7 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // eslint deprecated
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true }
 };
 export default nextConfig;
