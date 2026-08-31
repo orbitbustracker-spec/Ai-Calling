@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Layers, CheckCircle2, AlertCircle, Building2, MessageSquare, Instagram, Webhook, Phone, Settings, Save } from 'lucide-react';
+import { Layers, CheckCircle2, AlertCircle, Building2, MessageSquare, Webhook, Phone, Settings, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function OmnichannelAdminClient({ organizations, initialIntegrations }: { organizations: any[], initialIntegrations: any[] }) {
@@ -18,7 +18,7 @@ export default function OmnichannelAdminClient({ organizations, initialIntegrati
   const providers = [
     { id: 'WHATSAPP', name: 'WhatsApp Business', icon: Phone },
     { id: 'MESSENGER', name: 'FB Messenger', icon: MessageSquare },
-    { id: 'INSTAGRAM', name: 'Instagram DMs', icon: Instagram },
+    { id: 'INSTAGRAM', name: 'Instagram DMs', icon: MessageSquare },
     { id: 'CUSTOM_WEBHOOK', name: 'Custom Webhook', icon: Webhook },
   ];
 
