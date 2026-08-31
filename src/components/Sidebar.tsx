@@ -74,6 +74,7 @@ export const Sidebar = ({ role }: { role?: string }) => {
         { href: '/admin/telephony', label: 'Telephony & SIP', icon: Settings2 },
         { href: '/admin/ai-engines', label: 'AI Engines', icon: Cpu },
         { href: '/admin/organizations', label: 'Organizations', icon: Building2 },
+        { href: '/admin/omnichannel', label: 'Omnichannel Integrations', icon: Layers },
         { href: '/admin/billing', label: 'Billing & Config', icon: CreditCard },
         { href: '/admin/new-users', label: 'New Users (Approvals)', icon: Users },
       ]

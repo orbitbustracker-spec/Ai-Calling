@@ -65,7 +65,8 @@ model Organization {
   CrmNote               CrmNote[]
   CrmTicket             CrmTicket[]
   CrmTransaction        CrmTransaction[]
-  AiNodes               OrganizationAiNode[]
+  omnichannelIntegrations OmnichannelIntegration[]
+    AiNodes               OrganizationAiNode[]
   SipTrunks             OrganizationSipTrunk[]
   CrmReminder           CrmReminder[]
 }
@@ -503,6 +504,19 @@ enum FeatureKey {
   CALL_TAGGING
   PERSONALIZED_MESSAGES
   SOCIAL_INTEGRATIONS
+}
+
+model OmnichannelIntegration {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  provider       String       // "WHATSAPP", "MESSENGER", "INSTAGRAM", "TIKTOK", "TELEGRAM", "VIBER"
+  isActive       Boolean      @default(false)
+  credentials    Json         @default("{}")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, provider])
 }
 
 model FeatureConfiguration {
