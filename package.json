@@ -28,6 +28,7 @@
     "prisma": "^5.22.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-hot-toast": "^2.6.0",
     "sip.js": "^0.21.2",
     "tailwind-merge": "^3.6.0",
     "ws": "^8.21.3"
