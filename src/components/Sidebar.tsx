@@ -60,6 +60,7 @@ export const Sidebar = ({ role }: { role?: string }) => {
         { href: '/capabilities/personalized-messages', label: 'Dynamic TTS', icon: Mic },
         { href: '/capabilities/click-to-call', label: 'Click to Call', icon: Plus },
         { href: '/capabilities/transfers', label: 'Transfers & Routing', icon: Network },
+          { href: '/capabilities/ivr-builder', label: 'Multi-Level IVR', icon: Hash },
         { href: '/capabilities/voicemail', label: 'Visual Voicemail', icon: Mic },
         { href: '/billing', label: 'Billing & Usage', icon: CreditCard },
       ]

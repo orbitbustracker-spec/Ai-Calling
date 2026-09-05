@@ -44,6 +44,10 @@ model Organization {
   isCommerceActive      Boolean   @default(false)
   commerceMinutes       Int       @default(0)
 
+  businessHours Json?
+  holidayCalendar Json?
+  afterHoursTarget String?
+
   users                 User[]
   knowledgeBases        KnowledgeBase[]
   agents                AIAgent[]
@@ -145,6 +149,8 @@ model AIAgent {
   language        String?
   temperature     Float?
   maxDuration     Int?
+  confidenceThreshold Float? @default(0.8)
+  fallbackTarget  String?
   isTemplate      Boolean        @default(false)
   knowledgeBaseId String?
   knowledgeBase   KnowledgeBase? @relation(fields: [knowledgeBaseId], references: [id], onDelete: SetNull)
