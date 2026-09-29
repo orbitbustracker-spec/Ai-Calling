@@ -15,6 +15,18 @@ export default function UpdatePasswordPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
+  const [fatalError, setFatalError] = useState('');
+
+  import('react').then((React) => {
+    React.useEffect(() => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const err = searchParams.get('error_description') || hashParams.get('error_description');
+      if (err) {
+        setFatalError('This reset link is invalid or has expired. Please request a new one.');
+      }
+    }, []);
+  });
 
   const [supabase] = useState(() => {
     try {
@@ -91,7 +103,7 @@ export default function UpdatePasswordPage() {
             </div>
           )}
 
-          <form onSubmit={handleUpdate} className="space-y-5">
+          {!fatalError && (<form onSubmit={handleUpdate} className="space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">New Password</label>
               <div className="relative">
