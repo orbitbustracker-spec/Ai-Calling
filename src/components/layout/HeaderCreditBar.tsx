@@ -6,6 +6,40 @@ import { PhoneCall, MessageSquare, Wallet, Plus, X, Zap } from 'lucide-react';
 
 export const HeaderCreditBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rechargeAmount, setRechargeAmount] = useState('1000');
+  const [isRecharging, setIsRecharging] = useState(false);
+
+  const handleRecharge = async () => {
+    if (!rechargeAmount || isNaN(Number(rechargeAmount)) || Number(rechargeAmount) <= 0) {
+      alert("Please enter a valid amount");
+      return;
+    }
+    
+    setIsRecharging(true);
+    try {
+      const res = await fetch('/api/org/payments/recharge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: Number(rechargeAmount) })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("Demo Payment Successful! Rs. " + rechargeAmount + " added.");
+        setBalance(prev => ({
+          ...prev,
+          walletBalanceNpr: data.newBalance || (prev.walletBalanceNpr + Number(rechargeAmount))
+        }));
+        setIsModalOpen(false);
+        window.location.reload();
+      } else {
+        alert("Error: " + data.error);
+      }
+    } catch (e) {
+      alert("Network error.");
+    }
+    setIsRecharging(false);
+  };
+
   const [balance, setBalance] = useState({
     remainingMinutes: 0,
     walletBalanceNpr: 0
