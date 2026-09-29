@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PhoneCall, MessageSquare, Wallet, Plus, X, Zap } from 'lucide-react';
 
@@ -8,6 +6,10 @@ export const HeaderCreditBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rechargeAmount, setRechargeAmount] = useState('1000');
   const [isRecharging, setIsRecharging] = useState(false);
+  const [balance, setBalance] = useState({
+    remainingMinutes: 0,
+    walletBalanceNpr: 0
+  });
 
   const handleRecharge = async () => {
     if (!rechargeAmount || isNaN(Number(rechargeAmount)) || Number(rechargeAmount) <= 0) {
@@ -40,11 +42,6 @@ export const HeaderCreditBar = () => {
     setIsRecharging(false);
   };
 
-  const [balance, setBalance] = useState({
-    remainingMinutes: 0,
-    walletBalanceNpr: 0
-  });
-
   useEffect(() => {
     fetch('/api/org/billing/summary')
       .then(res => res.json())
@@ -59,6 +56,12 @@ export const HeaderCreditBar = () => {
   }, []);
 
   const textCredits = Math.floor(balance.walletBalanceNpr / 0.50);
+
+  // Expose the modal open function to window so other components can call it
+  useEffect(() => {
+    (window as any).openRechargeModal = () => setIsModalOpen(true);
+    return () => { delete (window as any).openRechargeModal; };
+  }, []);
 
   return (
     <>
@@ -130,7 +133,11 @@ export const HeaderCreditBar = () => {
               <div className="p-6">
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   {['1000', '5000', '10000', '25000'].map((amt) => (
-                    <button key={amt} className="py-3 rounded-xl bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/5 hover:border-indigo-500/50 text-gray-700 dark:text-slate-300 font-bold text-sm transition-all hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-700 dark:hover:text-indigo-300">
+                    <button 
+                      key={amt} 
+                      onClick={() => setRechargeAmount(amt)}
+                      className={`py-3 rounded-xl border font-bold text-sm transition-all ${rechargeAmount === amt ? 'bg-indigo-100 dark:bg-indigo-500/20 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/5 hover:border-indigo-500/50 text-gray-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-700 dark:hover:text-indigo-300'}`}
+                    >
                       Rs. {amt}
                     </button>
                   ))}
@@ -141,12 +148,18 @@ export const HeaderCreditBar = () => {
                   <input 
                     type="number" 
                     placeholder="Custom Amount" 
+                    value={rechargeAmount}
+                    onChange={(e) => setRechargeAmount(e.target.value)}
                     className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-gray-900 dark:text-white font-bold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
                   />
                 </div>
 
-                <button className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl py-3 shadow-md transition-all">
-                  Proceed to Payment
+                <button 
+                  onClick={handleRecharge}
+                  disabled={isRecharging}
+                  className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl py-3 shadow-md transition-all disabled:opacity-50"
+                >
+                  {isRecharging ? "Processing..." : "Proceed to Payment (Demo)"}
                 </button>
                 <p className="text-center text-[10px] text-gray-500 mt-4 uppercase font-bold tracking-wider">
                   Secure Payments via eSewa, Khalti, & ConnectIPS
