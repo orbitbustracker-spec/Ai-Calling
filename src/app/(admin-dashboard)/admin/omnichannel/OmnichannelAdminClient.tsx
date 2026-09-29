@@ -74,6 +74,7 @@ export default function OmnichannelAdminClient({ organizations, initialIntegrati
       });
       if (res.ok) {
         alert('Integration Approved and Activated Successfully!');
+        setSelectedProvider(null);
         router.refresh();
       } else {
         const errorData = await res.json();
