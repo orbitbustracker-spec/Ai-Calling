@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import { Button } from '@/components/Button';
 import { Mail, Bot, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -13,9 +13,14 @@ export default function ForgotPasswordPage() {
 
   const [supabase] = useState(() => {
     try {
-      return createBrowserClient(
+      return createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder',
+        {
+          auth: {
+            flowType: 'implicit'
+          }
+        }
       );
     } catch (e) {
       return { auth: { resetPasswordForEmail: async () => ({ error: { message: 'Invalid Supabase Configuration' } }) } } as any;
