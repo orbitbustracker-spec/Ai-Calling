@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/Button';
@@ -17,16 +17,16 @@ export default function UpdatePasswordPage() {
   const router = useRouter();
   const [fatalError, setFatalError] = useState('');
 
-  import('react').then((React) => {
-    React.useEffect(() => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
       const searchParams = new URLSearchParams(window.location.search);
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const err = searchParams.get('error_description') || hashParams.get('error_description');
       if (err) {
         setFatalError('This reset link is invalid or has expired. Please request a new one.');
       }
-    }, []);
-  });
+    }
+  }, []);
 
   const [supabase] = useState(() => {
     try {
@@ -159,7 +159,7 @@ export default function UpdatePasswordPage() {
             >
               {loading ? 'Updating...' : 'Update Password'} <ArrowRight className="h-5 w-5" />
             </Button>
-          </form>
+          </form>)}
         </div>
       </div>
     </div>
