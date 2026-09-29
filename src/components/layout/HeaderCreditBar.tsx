@@ -101,6 +101,7 @@ export const HeaderCreditBar = () => {
             </div>
             
             <button 
+              id="topup-btn"
               onClick={() => setIsModalOpen(true)}
               className="bg-indigo-600 hover:bg-indigo-700 text-white h-8 px-3 rounded-lg flex items-center gap-1 font-bold text-xs transition-colors"
             >
