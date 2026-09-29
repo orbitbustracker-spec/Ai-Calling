@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getCurrentUser } from '@/lib/authorization';
 
@@ -19,18 +19,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
     }
 
-    // Demo: Directly add the balance
+    // Demo: We use commerceMinutes as the proxy for TEXT/WHATSAPP balance since walletBalanceNpr doesn't exist
+    // Let's add 5000 text credits every time they recharge for demo
     const updatedOrg = await prisma.organization.update({
       where: { id: user.organizationId },
       data: {
-        walletBalanceNpr: { increment: Number(amount) }
+        commerceMinutes: { increment: 5000 }
       }
     });
 
     return NextResponse.json({ 
       success: true, 
       message: 'Recharge successful (Demo Mode)',
-      newBalance: updatedOrg.walletBalanceNpr
+      newBalance: updatedOrg.commerceMinutes
     });
   } catch (error: any) {
     console.error('Error recharging:', error);

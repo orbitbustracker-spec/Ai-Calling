@@ -9,7 +9,8 @@ export const HeaderCreditBar = () => {
   const [isRecharging, setIsRecharging] = useState(false);
   const [balance, setBalance] = useState({
     remainingMinutes: 0,
-    walletBalanceNpr: 0
+    walletBalanceNpr: 0,
+    commerceMinutes: 0
   });
 
   const handleRecharge = async () => {
@@ -27,11 +28,7 @@ export const HeaderCreditBar = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        alert("Demo Payment Successful! Rs. " + rechargeAmount + " added.");
-        setBalance(prev => ({
-          ...prev,
-          walletBalanceNpr: data.newBalance || (prev.walletBalanceNpr + Number(rechargeAmount))
-        }));
+        alert("Demo Payment Successful! Texts added.");
         setIsModalOpen(false);
         window.location.reload();
       } else {
@@ -44,19 +41,18 @@ export const HeaderCreditBar = () => {
   };
 
   useEffect(() => {
-    fetch('/api/org/billing/summary')
-      .then(res => res.json())
-      .then(data => {
-        if(data && typeof data.walletBalanceNpr === 'number') {
-          setBalance({
-            walletBalanceNpr: data.walletBalanceNpr,
-            remainingMinutes: data.totalRemainingMinutes || 0
-          });
-        }
-      }).catch(err => console.error("Error fetching balance:", err));
+    Promise.all([
+      fetch('/api/org/billing/summary').then(res => res.json()),
+      fetch('/api/org/omnichannel/status').then(res => res.json())
+    ]).then(([billingData, statusData]) => {
+        setBalance({
+          walletBalanceNpr: 0,
+          remainingMinutes: billingData.remainingMinutes || 0,
+          commerceMinutes: statusData.commerceMinutes || 0
+        });
+    }).catch(err => console.error("Error fetching balance:", err));
   }, []);
 
-  const textCredits = Math.floor(balance.walletBalanceNpr / 0.50);
 
   // Expose the modal open function to window so other components can call it
   useEffect(() => {
@@ -89,18 +85,13 @@ export const HeaderCreditBar = () => {
               <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <div className="flex flex-col">
                 <span className="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase leading-tight">Texts / WhatsApp</span>
-                <span className="text-sm font-black text-gray-900 dark:text-white leading-tight">~{textCredits.toLocaleString()}</span>
+                <span className="text-sm font-black text-gray-900 dark:text-white leading-tight">~{balance.commerceMinutes.toLocaleString()}</span>
               </div>
             </div>
           </div>
 
           {/* Wallet Balance & Top Up Button */}
           <div className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 rounded-xl p-1 h-10 pl-4">
-            <div className="flex items-center gap-2 mr-2">
-              <Wallet className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              <span className="text-sm font-black text-indigo-700 dark:text-indigo-100">Rs. {balance.walletBalanceNpr.toLocaleString()}</span>
-            </div>
-            
             <button 
               id="topup-btn"
               onClick={() => setIsModalOpen(true)}
