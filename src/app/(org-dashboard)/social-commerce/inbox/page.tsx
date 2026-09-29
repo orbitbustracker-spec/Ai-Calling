@@ -1,18 +1,69 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle, Search, MoreVertical, Send, Image as ImageIcon, Bot, User, Camera } from 'lucide-react';
 
-const CHATS = [
-  { id: 1, name: 'Sneh Raj', platform: 'whatsapp', lastMsg: 'I want to buy the black jacket.', time: '10:42 AM', unread: 2, aiHandling: true },
-  { id: 2, name: 'Rajan Koirala', platform: 'messenger', lastMsg: 'Is delivery available in Pokhara?', time: '09:15 AM', unread: 0, aiHandling: false },
-  { id: 3, name: 'Istuti', platform: 'instagram', lastMsg: 'Payment sent via eSewa.', time: 'Yesterday', unread: 1, aiHandling: true },
-  { id: 4, name: 'Bikash', platform: 'tiktok', lastMsg: 'Can I get a discount?', time: 'Yesterday', unread: 0, aiHandling: true },
-];
-
 export default function UnifiedInboxPage() {
-  const [activeChat, setActiveChat] = useState(CHATS[0]);
-  const [aiEnabled, setAiEnabled] = useState(activeChat.aiHandling);
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [activeChat, setActiveChat] = useState<any>(null);
+  const [replyText, setReplyText] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const fetchInbox = async () => {
+    try {
+      const res = await fetch('/api/org/omnichannel/inbox');
+      const data = await res.json();
+      if (data.conversations) {
+        setConversations(data.conversations);
+        if (data.conversations.length > 0 && !activeChat) {
+          setActiveChat(data.conversations[0]);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInbox();
+    // Poll every 5 seconds for real-time demo
+    const interval = setInterval(fetchInbox, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleSend = async () => {
+    if (!replyText.trim() || !activeChat) return;
+
+    const optimisticMsg = {
+      id: Date.now().toString(),
+      senderType: 'HUMAN_AGENT',
+      content: replyText,
+      createdAt: new Date().toISOString()
+    };
+    
+    // Optimistic update
+    const updatedChat = { ...activeChat, messages: [optimisticMsg, ...activeChat.messages] };
+    setActiveChat(updatedChat);
+    setConversations(prev => prev.map(c => c.id === activeChat.id ? updatedChat : c));
+    setReplyText('');
+
+    try {
+      await fetch('/api/org/omnichannel/reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId: activeChat.id,
+          text: optimisticMsg.content,
+          takeover: true // Sending manually triggers takeover
+        })
+      });
+      fetchInbox();
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className="h-[750px] bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-white/10 rounded-2xl flex overflow-hidden shadow-sm">
@@ -32,143 +83,139 @@ export default function UnifiedInboxPage() {
         </div>
         
         <div className="flex-1 overflow-y-auto">
-          {CHATS.map(chat => (
-            <div 
-              key={chat.id} 
-              onClick={() => { setActiveChat(chat); setAiEnabled(chat.aiHandling); }}
-              className={`p-4 border-b border-gray-100 dark:border-white/5 cursor-pointer transition-colors ${activeChat.id === chat.id ? 'bg-indigo-50 dark:bg-indigo-500/10' : 'hover:bg-gray-100 dark:hover:bg-slate-800'}`}
-            >
-              <div className="flex justify-between items-start mb-1">
-                <div className="flex items-center gap-2">
-                  <div className="font-bold text-gray-900 dark:text-slate-200">{chat.name}</div>
-                  {chat.platform === 'whatsapp' && <MessageCircle className="w-3 h-3 text-green-500" />}
-                  {chat.platform === 'messenger' && <MessageCircle className="w-3 h-3 text-blue-500" />}
-                  {chat.platform === 'instagram' && <Camera className="w-3 h-3 text-pink-500" />}
-                  {chat.platform === 'tiktok' && <div className="w-3 h-3 bg-gray-900 dark:bg-white rounded-full" />}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-slate-500">{chat.time}</div>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="text-sm text-gray-600 dark:text-slate-400 truncate pr-4">{chat.lastMsg}</div>
-                {chat.unread > 0 && (
-                  <div className="w-5 h-5 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white text-[10px] font-bold flex items-center justify-center">
-                    {chat.unread}
+          {loading && conversations.length === 0 ? (
+            <div className="p-4 text-center text-gray-500 text-sm">Loading chats...</div>
+          ) : conversations.length === 0 ? (
+            <div className="p-4 text-center text-gray-500 text-sm">No conversations found. Add your webhook to Meta!</div>
+          ) : (
+            conversations.map(chat => {
+              const lastMsg = chat.messages[0]?.content || 'No messages';
+              return (
+                <div 
+                  key={chat.id} 
+                  onClick={() => setActiveChat(chat)}
+                  className={`p-4 border-b border-gray-100 dark:border-white/5 cursor-pointer transition-colors ${activeChat?.id === chat.id ? 'bg-indigo-50 dark:bg-indigo-500/10' : 'hover:bg-gray-100 dark:hover:bg-slate-800'}`}
+                >
+                  <div className="flex justify-between items-start mb-1">
+                    <div className="flex items-center gap-2">
+                      <div className="font-bold text-gray-900 dark:text-slate-200 truncate w-32">{chat.contactName || chat.contactId}</div>
+                      {chat.platform === 'WHATSAPP' && <MessageCircle className="w-3 h-3 text-green-500" />}
+                      {chat.platform === 'MESSENGER' && <MessageCircle className="w-3 h-3 text-blue-500" />}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-slate-500">
+                      {new Date(chat.lastMessageAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
-          ))}
+                  
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-gray-500 dark:text-slate-400 truncate pr-2 w-48">{lastMsg}</p>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 
-      {/* Main Chat Canvas */}
-      <div className="flex-1 flex flex-col relative bg-white dark:bg-slate-950">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
-        
-        {/* Header */}
-        <div className="h-16 border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-gray-600 dark:text-slate-400 font-bold">
-              {activeChat.name[0]}
-            </div>
-            <div>
-              <div className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                {activeChat.name}
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 border border-gray-200 dark:border-transparent">
-                  {activeChat.platform}
-                </span>
+      {/* Main Chat Area */}
+      {activeChat ? (
+        <div className="flex-1 flex flex-col bg-white dark:bg-slate-950">
+          <div className="h-16 border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 bg-white dark:bg-slate-900/50">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-bold">
+                {(activeChat.contactName || 'U').charAt(0).toUpperCase()}
               </div>
-              <div className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span> Online
+              <div>
+                <div className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  {activeChat.contactName || activeChat.contactId}
+                  <span className="text-[10px] bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded text-gray-600 dark:text-slate-400 uppercase tracking-wider font-bold">
+                    {activeChat.platform}
+                  </span>
+                </div>
+                <div className="text-xs text-emerald-500 font-medium flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Online
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-lg p-1">
+            <div className="flex items-center gap-2 bg-gray-100 dark:bg-slate-800 p-1 rounded-xl">
               <button 
-                onClick={() => setAiEnabled(true)}
-                className={`px-3 py-1.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all ${aiEnabled ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200'}`}
+                onClick={async () => {
+                  await fetch('/api/org/omnichannel/reply', { method: 'POST', body: JSON.stringify({ conversationId: activeChat.id, takeover: false }) });
+                  fetchInbox();
+                }}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold transition-all ${activeChat.aiStatus === 'AI_ACTIVE' ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-white'}`}
               >
                 <Bot className="w-4 h-4" /> AI Auto-Pilot
               </button>
               <button 
-                onClick={() => setAiEnabled(false)}
-                className={`px-3 py-1.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all ${!aiEnabled ? 'bg-orange-500 text-white shadow-md' : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200'}`}
+                onClick={async () => {
+                  await fetch('/api/org/omnichannel/reply', { method: 'POST', body: JSON.stringify({ conversationId: activeChat.id, takeover: true }) });
+                  fetchInbox();
+                }}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold transition-all ${activeChat.aiStatus === 'HUMAN_TAKEOVER' ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-white'}`}
               >
                 <User className="w-4 h-4" /> Human Takeover
               </button>
             </div>
-            <button className="text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-white"><MoreVertical className="w-5 h-5" /></button>
-          </div>
-        </div>
-
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 z-10">
-          <div className="flex justify-center">
-            <span className="px-3 py-1 bg-gray-100 dark:bg-slate-900 rounded-full text-xs text-gray-500 dark:text-slate-500 font-medium">Today</span>
           </div>
 
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 bg-gray-100 dark:bg-slate-800 rounded-full flex shrink-0 items-center justify-center text-gray-600 dark:text-slate-400 text-xs font-bold">
-              {activeChat.name[0]}
-            </div>
-            <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl rounded-tl-sm p-4 text-gray-800 dark:text-slate-200 max-w-md shadow-sm border border-gray-200 dark:border-white/5">
-              Hi, I saw your ad for the Smart Voice AI agent. How much is it?
-            </div>
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col-reverse gap-4">
+            {activeChat.messages.map((msg: any) => {
+              const isMe = msg.senderType !== 'CUSTOMER';
+              return (
+                <div key={msg.id} className={`flex gap-3 max-w-[70%] ${isMe ? 'ml-auto flex-row-reverse' : ''}`}>
+                  <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-slate-800">
+                    {msg.senderType === 'AI' ? <Bot className="w-4 h-4 text-indigo-500" /> : 
+                     msg.senderType === 'HUMAN_AGENT' ? <User className="w-4 h-4 text-emerald-500" /> :
+                     <span className="text-xs font-bold text-gray-500">{(activeChat.contactName || 'U').charAt(0)}</span>}
+                  </div>
+                  
+                  <div className={`p-4 rounded-2xl text-sm shadow-sm ${
+                    isMe 
+                      ? 'bg-indigo-600 text-white rounded-tr-sm' 
+                      : 'bg-white dark:bg-slate-900 border border-gray-100 dark:border-white/5 text-gray-800 dark:text-slate-200 rounded-tl-sm'
+                  }`}>
+                    {msg.content}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
-          <div className="flex items-start gap-3 flex-row-reverse">
-            <div className="w-8 h-8 bg-indigo-600 rounded-full flex shrink-0 items-center justify-center text-white text-xs font-bold">
-              <Bot className="w-4 h-4" />
-            </div>
-            <div className="bg-indigo-600 rounded-2xl rounded-tr-sm p-4 text-white max-w-md shadow-md">
-              Hello {activeChat.name}! 🤖 Our Smart Voice AI agent starts at NPR 5,000/month. Would you like me to send you the full pricing catalog?
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 bg-gray-100 dark:bg-slate-800 rounded-full flex shrink-0 items-center justify-center text-gray-600 dark:text-slate-400 text-xs font-bold">
-              {activeChat.name[0]}
-            </div>
-            <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl rounded-tl-sm p-4 text-gray-800 dark:text-slate-200 max-w-md shadow-sm border border-gray-200 dark:border-white/5">
-              {activeChat.lastMsg}
-            </div>
-          </div>
-
-          {!aiEnabled && (
-            <div className="flex justify-center">
-              <span className="px-3 py-1 bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-full text-xs text-orange-600 dark:text-orange-400 font-medium flex items-center gap-2">
-                <User className="w-3 h-3" /> Human Agent took over
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Input area */}
-        <div className="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-gray-200 dark:border-white/10 z-10">
-          <div className="flex items-center gap-3">
-            <button className="p-2 text-gray-400 hover:text-gray-600 dark:text-slate-400 dark:hover:text-white rounded-full hover:bg-gray-100 dark:hover:bg-slate-800">
-              <ImageIcon className="w-5 h-5" />
-            </button>
-            <div className="flex-1 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-xl flex items-center px-4 py-2">
+          <div className="p-4 bg-white dark:bg-slate-900/50 border-t border-gray-200 dark:border-white/10">
+            {activeChat.aiStatus === 'AI_ACTIVE' && (
+              <div className="mb-3 text-xs text-center text-indigo-600 dark:text-indigo-400 font-medium bg-indigo-50 dark:bg-indigo-500/10 py-1.5 rounded-lg">
+                🤖 AI is currently handling this conversation. Type below to take over manually.
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <button className="p-3 text-gray-400 hover:text-indigo-600 transition-colors rounded-xl hover:bg-indigo-50 dark:hover:bg-slate-800">
+                <ImageIcon className="w-5 h-5" />
+              </button>
               <input 
                 type="text" 
-                placeholder={aiEnabled ? "AI is handling this conversation..." : "Type a message..."} 
-                disabled={aiEnabled}
-                className="w-full bg-transparent text-gray-900 dark:text-white outline-none disabled:opacity-50"
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                placeholder="Type a message..." 
+                className="flex-1 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white focus:border-indigo-500 outline-none"
               />
+              <button 
+                onClick={handleSend}
+                className="p-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md transition-all"
+              >
+                <Send className="w-5 h-5" />
+              </button>
             </div>
-            <button 
-              disabled={aiEnabled}
-              className="p-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-200 disabled:dark:bg-slate-800 disabled:text-gray-400 disabled:dark:text-slate-500 text-white rounded-xl transition-all shadow-md disabled:shadow-none"
-            >
-              <Send className="w-5 h-5" />
-            </button>
           </div>
         </div>
-
-      </div>
+      ) : (
+        <div className="flex-1 flex items-center justify-center flex-col text-gray-400 dark:text-slate-600">
+          <MessageCircle className="w-16 h-16 mb-4 opacity-20" />
+          <p>Select a conversation to start chatting</p>
+        </div>
+      )}
     </div>
   );
 }
